@@ -1,3 +1,3 @@
-# template-repository
+# odin-todo
 
-My first attempt at creating a template repository. Will include webpack, directory structure, css reset.
+Todo list assignment for Odin Project. 
