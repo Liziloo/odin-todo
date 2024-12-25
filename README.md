@@ -1,15 +1,3 @@
-# 🚀 Welcome to your new awesome project!
+# odin-todo
 
-This project has been created using **create-webpack-app**, you can now run
-
-```bash
-npm run build
-```
-
-or
-
-```bash
-yarn build
-```
-
-to bundle your application
+Todo list assignment for Odin Project. 
