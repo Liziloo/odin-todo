@@ -10,13 +10,11 @@ function taskView() {
     
     addList("default", "I'm a tasklist");
     addList("personal");
-    console.log(lists);
     for (let list of lists) {
         const listDiv = document.createElement('div');
         listDiv.classList.add('list');
         const listName = document.createElement('h3');
-        listName.textContent = "list";
-        console.log(list.name);
+        listName.textContent = list.name;
         const taskUl = document.createElement('ul');
         taskUl.classList.add('tasks');
         const listTasks = list.tasks;
