@@ -1,1 +1,5 @@
-console.log("Hello This is a Javascript project.");
+import taskView from "./modules/taskView";
+
+
+
+taskView();

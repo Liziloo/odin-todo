@@ -1,17 +1,22 @@
 
-import { lists } from "./list";
+import { addList, lists } from "./list";
 export default taskView;
 
-const currentLists = lists;
 
 const contentDiv = document.querySelector('#content');
 
+
 function taskView() {
-    for (let list of currentLists) {
+    
+    addList("default", "I'm a tasklist");
+    addList("personal");
+    console.log(lists);
+    for (let list of lists) {
         const listDiv = document.createElement('div');
         listDiv.classList.add('list');
         const listName = document.createElement('h3');
-        listName.textContent = list.name;
+        listName.textContent = "list";
+        console.log(list.name);
         const taskUl = document.createElement('ul');
         taskUl.classList.add('tasks');
         const listTasks = list.tasks;
@@ -20,7 +25,7 @@ function taskView() {
             taskLi.textContent = task.name;
             taskUl.appendChild(taskLi);
         }
-        listDiv.appendChild(taskUl);
+        listDiv.append(listName, taskUl);
         contentDiv.appendChild(listDiv);
     }
 
