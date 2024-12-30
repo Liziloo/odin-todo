@@ -1,7 +1,6 @@
 import { toggler } from "./commonMethods";
-export { lists, addList };
+export { addList };
 
-const lists = [];
 
 const list = (name, description = '') => {
     let state = {
@@ -13,7 +12,7 @@ const list = (name, description = '') => {
     return Object.assign(state, toggler(state));
 }
 
-function addList(name, description = '') {
+function addList(lists, name, description = '') {
     const newList = list(name, description);
     lists.push(newList);
 }

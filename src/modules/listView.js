@@ -1,12 +1,15 @@
 
-import { addList, lists } from "./list";
-import { taskModal } from "./taskModal";
+import { addList } from "./list";
+import { addTask } from "./task";
+import { openTaskModal } from "./taskModal";
 export { listView };
 
 
 const contentDiv = document.querySelector('#content');
 
 function listView() {
+
+    const lists = [];
     
     addList("default");
     const listsDiv = document.createElement('div');
@@ -35,8 +38,31 @@ function listView() {
 
     function clickHandlerListDiv(e) {
         const selectedList = e.target.dataset.list;
-        taskModal(selectedList);
-    }
+        openTaskModal(selectedList);
 
+        const closeButton = document.querySelector('.modal-close');
+        const submitButton = document.querySelector('.task-submit-button');
+        closeButton.addEventListener('click', handleCloseModal);
+        submitButton.addEventListener('click', function(event) {handleTaskSubmit(event)});
+    }
 }
 
+function handleCloseModal() {
+    const taskModal = document.querySelector('.modal-background');
+    taskModal.remove();
+}
+
+function handleTaskSubmit(event) {
+    event.preventDefault();
+    const taskForm = document.querySelector('form');
+    const formData = new FormData(taskForm);
+    const taskList = formData.get('task-list');
+    const name = formData.get('task-name');
+    const description = formData.get('task-description');
+    const duedate = formData.get('task-duedate');
+    const notes = formData.get('task-notes');
+    const priority = formData.get('task-priority');
+    addTask(lists, name, description, duedate, priority, notes, taskList);
+    const taskModal = document.querySelector('.modal-background');
+    taskModal.remove();
+}

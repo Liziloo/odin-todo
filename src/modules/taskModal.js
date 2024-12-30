@@ -1,10 +1,9 @@
-import { addTask } from "./task";
-export { taskModal };
+export { openTaskModal };
 
 // Set the number of priority options available
 const priorityNumber = 5;
 
-const taskModal = (selectedList) => {
+const openTaskModal = (selectedList) => {
     const contentDiv = document.querySelector('#content');
     const modalBackgroundDiv = document.createElement('div');
     modalBackgroundDiv.classList.add('modal-background');
@@ -23,6 +22,7 @@ const taskModal = (selectedList) => {
 
     const taskForm = document.createElement('form');
     const listInput = document.createElement('input');
+    listInput.setAttribute('name', 'task-list');
     listInput.hidden = true;
     listInput.value = selectedList;
 
@@ -75,9 +75,14 @@ const taskModal = (selectedList) => {
     notesInput.setAttribute('name', 'task-notes');
     notesDiv.append(notesLabel, notesInput);
 
-    taskForm.append(nameDiv, descriptionDiv, duedateDiv, priorityDiv, notesDiv);
+    const submitButton = document.createElement('button');
+    submitButton.classList.add('task-submit-button');
+    submitButton.textContent = 'Add task';
+
+    taskForm.append(nameDiv, descriptionDiv, duedateDiv, priorityDiv, notesDiv, submitButton);
 
     modalDiv.append(modalHeader, taskForm);
     modalBackgroundDiv.appendChild(modalDiv);
     contentDiv.appendChild(modalBackgroundDiv);
+
 }
