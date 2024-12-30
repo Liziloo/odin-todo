@@ -12,10 +12,7 @@ const task = (name, description, duedate, priority, notes, list) => {
         list,
         done: false
     }
-    return Object.assign(
-        {},
-        toggler(state)
-    )
+    return Object.assign(state, toggler(state));
 }
 
 function addTask(name, description = '', duedate, priority = 3, notes = '', list = 'default') {

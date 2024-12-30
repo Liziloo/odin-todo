@@ -1,5 +1,4 @@
-import taskView from "./modules/taskView";
+import listView from "./modules/listView";
 
 
-
-taskView();
+listView();
