@@ -1,7 +1,7 @@
 
 import { addList, lists } from "./list";
 import { taskModal } from "./taskModal";
-export default listView;
+export { listView };
 
 
 const contentDiv = document.querySelector('#content');
