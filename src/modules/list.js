@@ -1,18 +1,21 @@
 import { toggler } from "./commonMethods";
-export { addList };
+import { task } from "./task";
+export { List };
 
 
-const list = (name, description = '') => {
-    let state = {
-        tasks: [],
-        name,
-        description,
-        done: false
+class List {
+    constructor(name, description) {
+        this.name = name,
+        this.description = description,
+        this.tasks = [],
+        this.done = false
     }
-    return Object.assign(state, toggler(state));
+
+    addTask(name, description = '', duedate, priority = 3, notes = '') {
+        const newTask = task(name, description, duedate, priority, notes);
+        this.tasks.push(newTask);
+    }
 }
 
-function addList(lists, name, description = '') {
-    const newList = list(name, description);
-    lists.push(newList);
-}
+Object.assign(List.prototype, toggler);
+

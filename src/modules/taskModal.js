@@ -3,7 +3,7 @@ export { openTaskModal };
 // Set the number of priority options available
 const priorityNumber = 5;
 
-const openTaskModal = (selectedList) => {
+const openTaskModal = () => {
     const contentDiv = document.querySelector('#content');
     const modalBackgroundDiv = document.createElement('div');
     modalBackgroundDiv.classList.add('modal-background');
@@ -21,10 +21,7 @@ const openTaskModal = (selectedList) => {
     modalHeader.append(modalTitle, closeButton);
 
     const taskForm = document.createElement('form');
-    const listInput = document.createElement('input');
-    listInput.setAttribute('name', 'task-list');
-    listInput.hidden = true;
-    listInput.value = selectedList;
+    taskForm.classList.add('task-form');
 
     const nameDiv = document.createElement('div');
     nameDiv.classList.add('task-name');
@@ -84,5 +81,14 @@ const openTaskModal = (selectedList) => {
     modalDiv.append(modalHeader, taskForm);
     modalBackgroundDiv.appendChild(modalDiv);
     contentDiv.appendChild(modalBackgroundDiv);
+
+    closeButton.addEventListener('click', handleCloseModal);
+
+    function handleCloseModal() {
+        const taskModal = document.querySelector('.modal-background');
+        taskModal.remove();
+    }
+    
+    
 
 }
