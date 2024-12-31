@@ -1,5 +1,5 @@
 export { toggler };
 
-const toggler = (state) => ({
-    toggle: () => state.done === false ? true: false
+const toggler = () => ({
+    toggle: () => this.done === false ? true: false
 })

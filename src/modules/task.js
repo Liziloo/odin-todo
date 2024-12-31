@@ -1,19 +1,15 @@
 import { toggler } from "./commonMethods";
-export { task, hasTasks };
+export { Task };
 
-const task = (name, description, duedate, priority, notes, list) => {
-    let state = {
-        name,
-        description,
-        duedate,
-        priority,
-        notes,
-        list,
-        done: false
+class Task {
+    constructor(name, description, duedate, priority, notes) {
+        this.name = name,
+        this.description = description,
+        this.duedate = duedate,
+        this.priority = priority,
+        this.notes = notes,
+        this.done = false
     }
-    return Object.assign(state, toggler(state));
 }
 
-const hasTasks = {
-    
-}
+Object.assign(Task.prototype, toggler)

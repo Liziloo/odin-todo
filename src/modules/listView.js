@@ -5,13 +5,12 @@ export { listView };
 
 
 const contentDiv = document.querySelector('#content');
+const lists = [];
+const defaultList = new List('default');
+lists.push(defaultList);
 
 function listView() {
-
-    const lists = [];
-    const defaultList = new List('default');
-    lists.push(defaultList);
-    console.log(lists);
+    contentDiv.textContent = '';
     const listsDiv = document.createElement('div');
     listsDiv.id = 'lists';
     for (let list of lists) {
@@ -25,7 +24,7 @@ function listView() {
         const taskUl = document.createElement('ul');
         taskUl.classList.add('tasks');
         const listTasks = list.tasks;
-        for (let task in listTasks) {
+        for (let task of listTasks) {
             const taskLi = document.createElement('li');
             taskLi.textContent = task.name;
             taskUl.appendChild(taskLi);
@@ -57,6 +56,7 @@ function listView() {
             const modal = document.querySelector('.modal-background');
             modal.remove();
             console.log(lists);
+            listView();
         })
     }
 }

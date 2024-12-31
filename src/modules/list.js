@@ -1,5 +1,5 @@
 import { toggler } from "./commonMethods";
-import { task } from "./task";
+import { Task } from "./task";
 export { List };
 
 
@@ -12,7 +12,7 @@ class List {
     }
 
     addTask(name, description = '', duedate, priority = 3, notes = '') {
-        const newTask = task(name, description, duedate, priority, notes);
+        const newTask = new Task(name, description, duedate, priority, notes);
         this.tasks.push(newTask);
     }
 }
