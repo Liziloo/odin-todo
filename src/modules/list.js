@@ -1,6 +1,7 @@
 import { toggler } from "./commonMethods";
 import { Task } from "./task";
-export { List };
+import { storeItem } from "./localStorage";
+export { List, initiateListsCollection };
 
 
 class List {
@@ -19,4 +20,15 @@ class List {
 
 Object.assign(List.prototype, toggler);
 
-const createListsCollection
+const initiateListsCollection = () => {
+    if (!localStorage.getItem('lists')) {
+        const defaultList = new List('default');
+        const newLists = [];
+        newLists.push(defaultList);
+        storeItem('lists', JSON.stringify(newLists));
+        console.log('newlists', newLists);
+        return newLists;
+    } else {
+        return JSON.parse(localStorage.getItem('lists'));
+    }
+}
