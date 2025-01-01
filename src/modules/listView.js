@@ -2,6 +2,7 @@
 import { initiateListsCollection, List } from "./list";
 import { openListModal } from "./listModal";
 import { storeItem } from "./localStorage";
+import { taskList } from "./taskList";
 import { openTaskModal } from "./taskModal";
 export { listView };
 
@@ -21,29 +22,42 @@ function listView() {
     newListDiv.appendChild(newListButton);
     newListButton.addEventListener('click', clickHandlerNewList);
 
-    const listsDiv = document.createElement('div');
-    listsDiv.id = 'lists';
+    const listSelectDiv = document.createElement('div');
+    const listSelect = document.createElement('select');
+    listSelect.setAttribute('name', 'list');
+    const allListsOption = document.createElement('option');
+    allListsOption.setAttribute('value', 'all');
+    allListsOption.textContent = 'All tasks';
     for (let list of lists) {
-        const listDiv = document.createElement('div');
-        listDiv.classList.add('list');
-        const listName = document.createElement('h3');
-        listName.textContent = list.name;
-        const taskButton = document.createElement('button');
-        taskButton.textContent = 'Add task';
-        taskButton.dataset.list = list.name;
-        const taskUl = document.createElement('ul');
-        taskUl.classList.add('tasks');
+        const listOption = document.createElement('option');
+        listOption.setAttribute('value', list.name);
+        listOption.textContent = list.name;
+        listSelect.append(allListsOption, listOption);
+    }
+    listSelect.addEventListener('change', (e) => {changeHandlerListSelect(e)});
+    listSelectDiv.appendChild(listSelect);
+
+    const listDiv = document.createElement('div');
+    const taskButton = document.createElement('button');
+    taskButton.classList.add('.new-task-button');
+    taskButton.textContent = 'Add task';
+    taskButton.dataset.list = 'All';
+    const taskDiv = document.createElement('div');
+    taskDiv.classList.add('tasks');
+    const taskUl = document.createElement('ul');
+    taskUl.classList.add('task-ul');
+    for (let list of lists) {
         const listTasks = list.tasks;
         for (let task of listTasks) {
             const taskLi = document.createElement('li');
             taskLi.textContent = task.name;
             taskUl.appendChild(taskLi);
         }
-        listDiv.append(listName, taskButton, taskUl);
-        listsDiv.appendChild(listDiv);
     }
-    contentDiv.append(newListDiv, listsDiv);
-    listsDiv.addEventListener('click', (e) => {clickHandlerListDiv(e)});
+    taskDiv.appendChild(taskUl);
+    listDiv.append(taskButton, taskDiv);
+    contentDiv.append(newListDiv, listSelectDiv, listDiv, taskDiv);
+    listDiv.addEventListener('click', (e) => {clickHandlerListDiv(e)});
 
     function clickHandlerListDiv(e) {
         const selectedList = e.target.dataset.list;
@@ -87,5 +101,28 @@ function listView() {
             modal.remove();
             listView();
         })
+    }
+
+    function changeHandlerListSelect(e) {
+        const selectedList = e.target.value;
+        taskButton.dataset.list = selectedList;
+        taskUl.textContent = '';
+        if (selectedList === 'all') {
+            for (let list of lists) {
+                const listTasks = list.tasks;
+                for (let task of listTasks) {
+                    const taskLi = document.createElement('li');
+                    taskLi.textContent = task.name;
+                    taskUl.appendChild(taskLi);
+                }
+            }
+        } else {
+            for (let list of lists) {
+                if (list.name === selectedList) {
+                    taskList(list);
+                }
+            }
+        }
+        
     }
 }
