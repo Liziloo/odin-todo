@@ -17,7 +17,6 @@ class List {
         this.tasks.push(newTask);
     }
 }
-
 Object.assign(List.prototype, toggler);
 
 const initiateListsCollection = () => {
@@ -30,7 +29,6 @@ const initiateListsCollection = () => {
     } else {
         const existingLists = [];
         const jsonLists = JSON.parse(localStorage.getItem('lists'));
-        console.log(jsonLists);
         for (let item of jsonLists) {
             const newInstance = new List(item.name, item.description);
             for (let task of item.tasks) {

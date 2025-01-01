@@ -1,5 +1,6 @@
 
-import { initiateListsCollection } from "./list";
+import { initiateListsCollection, List } from "./list";
+import { openListModal } from "./listModal";
 import { storeItem } from "./localStorage";
 import { openTaskModal } from "./taskModal";
 export { listView };
@@ -12,6 +13,14 @@ const lists = initiateListsCollection();
 
 function listView() {
     contentDiv.textContent = '';
+
+    const newListDiv = document.createElement('div');
+    const newListButton = document.createElement('button');
+    newListButton.classList.add('new-list-button');
+    newListButton.textContent = 'New list';
+    newListDiv.appendChild(newListButton);
+    newListButton.addEventListener('click', clickHandlerNewList);
+
     const listsDiv = document.createElement('div');
     listsDiv.id = 'lists';
     for (let list of lists) {
@@ -33,7 +42,7 @@ function listView() {
         listDiv.append(listName, taskButton, taskUl);
         listsDiv.appendChild(listDiv);
     }
-    contentDiv.appendChild(listsDiv);
+    contentDiv.append(newListDiv, listsDiv);
     listsDiv.addEventListener('click', (e) => {clickHandlerListDiv(e)});
 
     function clickHandlerListDiv(e) {
@@ -54,6 +63,25 @@ function listView() {
                     list.addTask(taskName, taskDescription, taskDuedate, taskPriority, taskNotes);
                 }
             }
+            storeItem('lists', JSON.stringify(lists));
+            const modal = document.querySelector('.modal-background');
+            modal.remove();
+            listView();
+        })
+    }
+
+    function clickHandlerNewList(e) {
+        e.preventDefault();
+        openListModal();
+        const submitButton = document.querySelector('.list-submit-button');
+        submitButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const listForm = document.querySelector('.list-form');
+            const formData = new FormData(listForm);
+            const listName = formData.get('list-name');
+            const listDescription = formData.get('list-description');
+            const newList = new List(listName, listDescription);
+            lists.push(newList);
             storeItem('lists', JSON.stringify(lists));
             const modal = document.querySelector('.modal-background');
             modal.remove();
