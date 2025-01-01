@@ -46,6 +46,7 @@ const openTaskModal = () => {
     duedateLabel.textContent = 'Due date:';
     const duedateInput = document.createElement('input');
     duedateInput.setAttribute('name', 'task-duedate');
+    duedateInput.setAttribute('type', 'date');
     duedateDiv.append(duedateLabel, duedateInput);
 
     const priorityDiv = document.createElement('div');

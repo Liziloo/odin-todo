@@ -1,5 +1,5 @@
 import { toggler } from "./commonMethods";
-import { Task } from "./task";
+import { Task } from "./taskClass";
 import { storeItem } from "./localStorage";
 export { List, initiateListsCollection };
 
@@ -21,7 +21,7 @@ Object.assign(List.prototype, toggler);
 
 const initiateListsCollection = () => {
     if (!localStorage.getItem('lists')) {
-        const defaultList = new List('default');
+        const defaultList = new List('Default');
         const newLists = [];
         newLists.push(defaultList);
         storeItem('lists', JSON.stringify(newLists));
@@ -32,7 +32,8 @@ const initiateListsCollection = () => {
         for (let item of jsonLists) {
             const newInstance = new List(item.name, item.description);
             for (let task of item.tasks) {
-                newInstance.addTask(task.name, task.description, task.duedate, task.priority, task.notes);
+                const taskDuedate = new Date(task.duedate)
+                newInstance.addTask(task.name, task.description, taskDuedate, task.priority, task.notes);
             }
             existingLists.push(newInstance);
         }

@@ -1,9 +1,9 @@
 
-import { initiateListsCollection, List } from "./list";
-import { openListModal } from "./listModal";
+import { initiateListsCollection, List } from "./listClass";
+import { openListModal } from "./newListModal";
 import { storeItem } from "./localStorage";
 import { taskList } from "./taskList";
-import { openTaskModal } from "./taskModal";
+import { openTaskModal } from "./newTaskModal";
 export { listView };
 
 
@@ -25,14 +25,12 @@ function listView() {
     const listSelectDiv = document.createElement('div');
     const listSelect = document.createElement('select');
     listSelect.setAttribute('name', 'list');
-    const allListsOption = document.createElement('option');
-    allListsOption.setAttribute('value', 'all');
-    allListsOption.textContent = 'All tasks';
+    listSelect.setAttribute('value', 'Default');
     for (let list of lists) {
         const listOption = document.createElement('option');
         listOption.setAttribute('value', list.name);
         listOption.textContent = list.name;
-        listSelect.append(allListsOption, listOption);
+        listSelect.append(listOption);
     }
     listSelect.addEventListener('change', (e) => {changeHandlerListSelect(e)});
     listSelectDiv.appendChild(listSelect);
@@ -41,18 +39,20 @@ function listView() {
     const taskButton = document.createElement('button');
     taskButton.classList.add('.new-task-button');
     taskButton.textContent = 'Add task';
-    taskButton.dataset.list = 'All';
+    taskButton.dataset.list = 'Default';
     const taskDiv = document.createElement('div');
     taskDiv.classList.add('tasks');
     const taskUl = document.createElement('ul');
     taskUl.classList.add('task-ul');
     for (let list of lists) {
-        const listTasks = list.tasks;
-        for (let task of listTasks) {
-            const taskLi = document.createElement('li');
-            taskLi.textContent = task.name;
-            taskUl.appendChild(taskLi);
-        }
+        if (list.name === 'Default') {
+            const listTasks = list.tasks;
+            for (let task of listTasks) {
+                const taskLi = document.createElement('li');
+                taskLi.textContent = task.name;
+                taskUl.appendChild(taskLi);
+            }
+        }   
     }
     taskDiv.appendChild(taskUl);
     listDiv.append(taskButton, taskDiv);
@@ -69,7 +69,7 @@ function listView() {
             const formData = new FormData(taskForm);
             const taskName = formData.get('task-name');
             const taskDescription = formData.get('task-description');
-            const taskDuedate = formData.get('task-duedate');
+            const taskDuedate = new Date(formData.get('task-duedate'));
             const taskPriority = formData.get('task-priority');
             const taskNotes = formData.get('task-notes');
             for (let list of lists) {
@@ -125,4 +125,5 @@ function listView() {
         }
         
     }
+    console.log(lists);
 }
