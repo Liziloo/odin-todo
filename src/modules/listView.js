@@ -1,5 +1,6 @@
 
 import { initiateListsCollection } from "./list";
+import { storeItem } from "./localStorage";
 import { openTaskModal } from "./taskModal";
 export { listView };
 
@@ -8,7 +9,6 @@ const contentDiv = document.querySelector('#content');
 
 // Check if user already has lists in local storage, if not, create default list
 const lists = initiateListsCollection();
-console.log(lists);
 
 function listView() {
     contentDiv.textContent = '';
@@ -54,6 +54,7 @@ function listView() {
                     list.addTask(taskName, taskDescription, taskDuedate, taskPriority, taskNotes);
                 }
             }
+            storeItem('lists', JSON.stringify(lists));
             const modal = document.querySelector('.modal-background');
             modal.remove();
             listView();

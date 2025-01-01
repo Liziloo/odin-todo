@@ -26,9 +26,18 @@ const initiateListsCollection = () => {
         const newLists = [];
         newLists.push(defaultList);
         storeItem('lists', JSON.stringify(newLists));
-        console.log('newlists', newLists);
         return newLists;
     } else {
-        return JSON.parse(localStorage.getItem('lists'));
+        const existingLists = [];
+        const jsonLists = JSON.parse(localStorage.getItem('lists'));
+        console.log(jsonLists);
+        for (let item of jsonLists) {
+            const newInstance = new List(item.name, item.description);
+            for (let task of item.tasks) {
+                newInstance.addTask(task.name, task.description, task.duedate, task.priority, task.notes);
+            }
+            existingLists.push(newInstance);
+        }
+        return existingLists;
     }
 }
