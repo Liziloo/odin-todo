@@ -1,13 +1,24 @@
 
 import { List } from "./list";
+import { storeItem } from "./localStorage";
 import { openTaskModal } from "./taskModal";
 export { listView };
 
 
 const contentDiv = document.querySelector('#content');
-const lists = [];
-const defaultList = new List('default');
-lists.push(defaultList);
+
+// Check if user already has lists in local storage, if not, create default list
+const lists = () => {
+    if (!localStorage.getItem('lists')) {
+        const defaultList = new List('default');
+        const newLists = [];
+        newLists.push(defaultList);
+        storeItem('lists', newLists);
+        return newLists;
+    } else {
+        return localStorage.getItem('lists');
+    }
+}
 
 function listView() {
     contentDiv.textContent = '';
@@ -55,7 +66,6 @@ function listView() {
             }
             const modal = document.querySelector('.modal-background');
             modal.remove();
-            console.log(lists);
             listView();
         })
     }
