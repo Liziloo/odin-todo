@@ -26,6 +26,10 @@ function listView(selectedListName) {
     const listSelectDiv = document.createElement('div');
     const listSelect = document.createElement('select');
     listSelect.setAttribute('name', 'list');
+    const allOption = document.createElement('option');
+    allOption.textContent = 'All tasks';
+    allOption.value = 'all';
+    listSelect.appendChild(allOption);
     for (let list of lists) {
         const listOption = document.createElement('option');
         listOption.setAttribute('value', list.name);
@@ -39,32 +43,33 @@ function listView(selectedListName) {
     listSelect.addEventListener('change', (e) => {changeHandlerListSelect(e)});
 
     const listDiv = document.createElement('div');
-    const taskButton = document.createElement('button');
-    taskButton.classList.add('.new-task-button');
-    taskButton.textContent = 'Add task';
-    taskButton.dataset.list = selectedListName;
-    taskButton.addEventListener('click', (e) => {clickHandlerNewTask(e)});
+    if (selectedListName !== 'all') {
+        console.log('triggered');
+        const taskButton = document.createElement('button');
+        taskButton.classList.add('.new-task-button');
+        taskButton.textContent = 'Add task';
+        taskButton.dataset.list = selectedListName;
+        taskButton.addEventListener('click', (e) => {clickHandlerNewTask(e)});
+        listDiv.appendChild(taskButton);
+    }
     const taskDiv = document.createElement('div');
     taskDiv.classList.add('tasks-div');
     const taskUl = document.createElement('ul');
     taskUl.classList.add('task-ul');
-    for (let task of selectedList.tasks) {
-        const taskLi = document.createElement('li');
-        const taskCheckbox = document.createElement('input');
-        taskCheckbox.setAttribute('type', 'checkbox');
-        taskCheckbox.dataset.taskName = task.name;
-        if (task.done) {
-            taskCheckbox.checked = true;
+    if (selectedListName === 'all') {
+        for (let list of lists) {
+            const tasks = []
+            for (let task of list.tasks) {
+                tasks.push(task);
+            }
+            populateTaskList(tasks);
         }
-        taskCheckbox.addEventListener('click', (e) => {clickHandlerTaskCheckbox(e)});
-        const checkboxLabel = document.createElement('label');
-        checkboxLabel.textContent = task.name;
-        taskLi.append(taskCheckbox, checkboxLabel);
-        taskUl.appendChild(taskLi);
+    } else {
+        populateTaskList(selectedList.tasks);
     }
    
     taskDiv.appendChild(taskUl);
-    listDiv.append(taskButton, taskDiv);
+    listDiv.appendChild(taskDiv);
     contentDiv.append(newListDiv, listSelectDiv, listDiv, taskDiv);
 
     function clickHandlerNewTask(e) {
@@ -80,7 +85,7 @@ function listView(selectedListName) {
             const taskDuedate = new Date(formData.get('task-duedate'));
             const taskPriority = formData.get('task-priority');
             const taskNotes = formData.get('task-notes');
-            selectedList.addTask(taskName, taskDescription, taskDuedate, taskPriority, taskNotes);
+            selectedList.addTask(taskName, taskDescription, taskDuedate, taskPriority, taskNotes, false);
             storeItem('lists', lists);
             const modal = document.querySelector('.modal-background');
             modal.remove();
@@ -120,20 +125,24 @@ function listView(selectedListName) {
     function changeHandlerListSelect(e) {
         const newSelectedListName = e.target.value;
         taskUl.textContent = '';
-        if (newSelectedListName === 'all') {
-            for (let list of lists) {
-                const listTasks = list.tasks;
-                for (let task of listTasks) {
-                    const taskLi = document.createElement('li');
-                    taskLi.textContent = task.name;
-                    taskUl.appendChild(taskLi);
-                }
+        listView(newSelectedListName);
+    }
+
+    function populateTaskList(tasks) {
+        for (let task of tasks) {
+            const taskLi = document.createElement('li');
+            const taskCheckbox = document.createElement('input');
+            taskCheckbox.setAttribute('type', 'checkbox');
+            taskCheckbox.dataset.taskName = task.name;
+            if (task.done) {
+                taskCheckbox.checked = true;
             }
-        } else {
-            listView(newSelectedListName);
+            const checkboxLabel = document.createElement('label');
+            checkboxLabel.textContent = task.name;
+            taskLi.append(taskCheckbox, checkboxLabel);
+            taskUl.appendChild(taskLi);
+            taskCheckbox.addEventListener('click', (e) => {clickHandlerTaskCheckbox(e)});
         }
-        
-        
     }
     console.log(lists);
 }
