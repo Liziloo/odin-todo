@@ -53,6 +53,9 @@ function listView(selectedListName) {
         const taskCheckbox = document.createElement('input');
         taskCheckbox.setAttribute('type', 'checkbox');
         taskCheckbox.dataset.taskName = task.name;
+        if (task.done) {
+            taskCheckbox.checked = true;
+        }
         taskCheckbox.addEventListener('click', (e) => {clickHandlerTaskCheckbox(e)});
         const checkboxLabel = document.createElement('label');
         checkboxLabel.textContent = task.name;

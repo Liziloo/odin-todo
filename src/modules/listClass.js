@@ -12,8 +12,8 @@ class List {
         this.done = false
     }
 
-    addTask(name, description = '', duedate, priority = 3, notes = '') {
-        const newTask = new Task(name, description, duedate, priority, notes);
+    addTask(name, description, duedate, priority, notes, done) {
+        const newTask = new Task(name, description, duedate, priority, notes, done);
         this.tasks.push(newTask);
     }
 }
@@ -33,7 +33,7 @@ const initiateListsCollection = () => {
             const newInstance = new List(item.name, item.description);
             for (let task of item.tasks) {
                 const taskDuedate = new Date(task.duedate)
-                newInstance.addTask(task.name, task.description, taskDuedate, task.priority, task.notes);
+                newInstance.addTask(task.name, task.description, taskDuedate, task.priority, task.notes, task.done);
             }
             existingLists.push(newInstance);
         }
