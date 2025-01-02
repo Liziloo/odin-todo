@@ -4,10 +4,11 @@ export { List, initiateListsCollection };
 
 
 class List {
-    constructor(name, description) {
+    constructor(name, description, duedate) {
         this.name = name,
         this.description = description,
         this.tasks = [],
+        this.duedate = duedate,
         this.done = false
     }
 
@@ -34,7 +35,7 @@ class List {
 
 const initiateListsCollection = () => {
     if (!localStorage.getItem('lists')) {
-        const defaultList = new List('Default');
+        const defaultList = new List('Default', '');
         const newLists = [];
         newLists.push(defaultList);
         storeItem('lists', newLists);
@@ -43,9 +44,10 @@ const initiateListsCollection = () => {
         const existingLists = [];
         const jsonLists = JSON.parse(localStorage.getItem('lists'));
         for (let item of jsonLists) {
-            const newInstance = new List(item.name, item.description);
+            const listDuedate = new Date(item.duedate);
+            const newInstance = new List(item.name, item.description, listDuedate);
             for (let task of item.tasks) {
-                const taskDuedate = new Date(task.duedate)
+                const taskDuedate = task.duedate === '' ? '' : new Date(task.duedate)
                 newInstance.addTask(task.name, task.description, taskDuedate, task.priority, task.notes, task.done);
             }
             existingLists.push(newInstance);

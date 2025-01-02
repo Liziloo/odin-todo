@@ -1,7 +1,8 @@
+import { format } from "date-fns";
 export { openListModal };
 
 
-const openListModal = () => {
+const openListModal = (list) => {
     const contentDiv = document.querySelector('#content');
     const modalBackgroundDiv = document.createElement('div');
     modalBackgroundDiv.classList.add('modal-background');
@@ -22,13 +23,23 @@ const openListModal = () => {
     listForm.classList.add('list-form');
 
     const nameDiv = document.createElement('div');
-    nameDiv.classList.add('list-name');
+    nameDiv.classList.add('name-div');
     const nameLabel = document.createElement('label');
     nameLabel.textContent = 'List name:';
     const nameInput = document.createElement('input');
     nameInput.required = true;
     nameInput.setAttribute('name', 'list-name');
     nameDiv.append(nameLabel, nameInput);
+
+    const duedateDiv = document.createElement('div');
+    duedateDiv.classList.add('duedate-div');
+    const duedateLabel = document.createElement('label');
+    duedateLabel.textContent = 'Complete list by:';
+    const duedateInput = document.createElement('input');
+    duedateInput.setAttribute('type', 'datetime-local');
+    duedateInput.setAttribute('name', 'list-duedate');
+    duedateInput.value = list ? format(list.duedate, "yyyy-MM-dd'T'HH:mm") : null;
+    duedateDiv.append(duedateLabel, duedateInput);
 
     const descriptionDiv = document.createElement('div');
     descriptionDiv.classList.add('list-description');
@@ -42,7 +53,7 @@ const openListModal = () => {
     submitButton.classList.add('list-submit-button');
     submitButton.textContent = 'Add list';
 
-    listForm.append(nameDiv, descriptionDiv, submitButton);
+    listForm.append(nameDiv, duedateDiv, descriptionDiv, submitButton);
 
     modalDiv.append(modalHeader, listForm);
     modalBackgroundDiv.appendChild(modalDiv);

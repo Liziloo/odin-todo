@@ -112,8 +112,9 @@ function listView(selectedListName) {
             const listForm = document.querySelector('.list-form');
             const formData = new FormData(listForm);
             const listName = formData.get('list-name');
+            const listDuedate = new Date(formData.get('list-duedate'));
             const listDescription = formData.get('list-description');
-            const newList = new List(listName, listDescription ? listDescription : '');
+            const newList = new List(listName, listDescription ? listDescription : '', listDuedate ? listDuedate : '');
             lists.push(newList);
             storeItem('lists', lists);
             const modal = document.querySelector('.modal-background');
