@@ -12,7 +12,9 @@ const contentDiv = document.querySelector('#content');
 // Check if user already has lists in local storage, if not, create default list
 const lists = initiateListsCollection();
 
-function listView() {
+function listView(selectedListName) {
+    const selectedList = lists.find(selectedList => selectedList.name === selectedListName);
+    
     contentDiv.textContent = '';
 
     const newListDiv = document.createElement('div');
@@ -25,42 +27,46 @@ function listView() {
     const listSelectDiv = document.createElement('div');
     const listSelect = document.createElement('select');
     listSelect.setAttribute('name', 'list');
-    listSelect.setAttribute('value', 'Default');
     for (let list of lists) {
         const listOption = document.createElement('option');
         listOption.setAttribute('value', list.name);
         listOption.textContent = list.name;
+        if (list.name === selectedListName) {
+            listOption.selected = true;
+        }
         listSelect.append(listOption);
     }
-    listSelect.addEventListener('change', (e) => {changeHandlerListSelect(e)});
     listSelectDiv.appendChild(listSelect);
+    listSelect.addEventListener('change', (e) => {changeHandlerListSelect(e)});
 
     const listDiv = document.createElement('div');
     const taskButton = document.createElement('button');
     taskButton.classList.add('.new-task-button');
     taskButton.textContent = 'Add task';
-    taskButton.dataset.list = 'Default';
+    taskButton.dataset.list = selectedListName;
+    taskButton.addEventListener('click', (e) => {clickHandlerNewTask(e)});
     const taskDiv = document.createElement('div');
-    taskDiv.classList.add('tasks');
+    taskDiv.classList.add('tasks-div');
     const taskUl = document.createElement('ul');
     taskUl.classList.add('task-ul');
-    for (let list of lists) {
-        if (list.name === 'Default') {
-            const listTasks = list.tasks;
-            for (let task of listTasks) {
-                const taskLi = document.createElement('li');
-                taskLi.textContent = task.name;
-                taskUl.appendChild(taskLi);
-            }
-        }   
+    for (let task of selectedList.tasks) {
+        const taskLi = document.createElement('li');
+        const taskCheckbox = document.createElement('input');
+        taskCheckbox.setAttribute('type', 'checkbox');
+        taskCheckbox.dataset.taskName = task.name;
+        taskCheckbox.addEventListener('click', (e) => {clickHandlerTaskCheckbox(e)});
+        const checkboxLabel = document.createElement('label');
+        checkboxLabel.textContent = task.name;
+        taskLi.append(taskCheckbox, checkboxLabel);
+        taskUl.appendChild(taskLi);
     }
+   
     taskDiv.appendChild(taskUl);
     listDiv.append(taskButton, taskDiv);
     contentDiv.append(newListDiv, listSelectDiv, listDiv, taskDiv);
-    listDiv.addEventListener('click', (e) => {clickHandlerListDiv(e)});
 
-    function clickHandlerListDiv(e) {
-        const selectedList = e.target.dataset.list;
+    function clickHandlerNewTask(e) {
+        e.preventDefault();
         openTaskModal();
         const submitButton = document.querySelector('.task-submit-button');
         submitButton.addEventListener('click', (e) => {
@@ -72,16 +78,22 @@ function listView() {
             const taskDuedate = new Date(formData.get('task-duedate'));
             const taskPriority = formData.get('task-priority');
             const taskNotes = formData.get('task-notes');
-            for (let list of lists) {
-                if (list.name === selectedList) {
-                    list.addTask(taskName, taskDescription, taskDuedate, taskPriority, taskNotes);
-                }
-            }
+            selectedList.addTask(taskName, taskDescription, taskDuedate, taskPriority, taskNotes);
             storeItem('lists', JSON.stringify(lists));
             const modal = document.querySelector('.modal-background');
             modal.remove();
-            listView();
+            listView(selectedList);
         })
+    }
+
+    function clickHandlerTaskCheckbox(e) {
+        const checkedTask = selectedList.tasks.find(checkedTask => checkedTask.name === e.target.dataset.taskName);
+        if (e.target.checked === true) {
+            checkedTask.done = true;
+        } else {
+            checkedTask.done = false;
+        }
+        storeItem('lists', lists);
     }
 
     function clickHandlerNewList(e) {
@@ -94,20 +106,19 @@ function listView() {
             const formData = new FormData(listForm);
             const listName = formData.get('list-name');
             const listDescription = formData.get('list-description');
-            const newList = new List(listName, listDescription);
+            const newList = new List(listName, listDescription ? listDescription : '');
             lists.push(newList);
-            storeItem('lists', JSON.stringify(lists));
+            storeItem('lists', lists);
             const modal = document.querySelector('.modal-background');
             modal.remove();
-            listView();
+            listView(listName);
         })
     }
 
     function changeHandlerListSelect(e) {
-        const selectedList = e.target.value;
-        taskButton.dataset.list = selectedList;
+        const newSelectedListName = e.target.value;
         taskUl.textContent = '';
-        if (selectedList === 'all') {
+        if (newSelectedListName === 'all') {
             for (let list of lists) {
                 const listTasks = list.tasks;
                 for (let task of listTasks) {
@@ -117,12 +128,10 @@ function listView() {
                 }
             }
         } else {
-            for (let list of lists) {
-                if (list.name === selectedList) {
-                    taskList(list);
-                }
-            }
+            taskList(newSelectedListName);
+                
         }
+        
         
     }
     console.log(lists);

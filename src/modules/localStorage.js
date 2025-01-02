@@ -21,7 +21,7 @@ function storageAvailable(type) {
 
 const storeItem = (identifier, item) => {
     if (storageAvailable('localStorage')) {
-        localStorage.setItem(identifier, item);
+        localStorage.setItem(identifier, JSON.stringify(item));
     } else {
         return;
     }
