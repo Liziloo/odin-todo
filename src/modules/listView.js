@@ -1,4 +1,4 @@
-
+import { format } from "date-fns";
 import { initiateListsCollection, List } from "./listClass";
 import { openListModal } from "./newListModal";
 import { storeItem } from "./localStorage";
@@ -139,7 +139,7 @@ function listView(selectedListName) {
                 taskCheckbox.checked = true;
             }
             const checkboxLabel = document.createElement('label');
-            checkboxLabel.textContent = task.name;
+            checkboxLabel.textContent = `${task.name} ${format(task.duedate, "M/d/yyyy '@' h:maaa")}`;
             checkboxLabel.setAttribute('for', task.name);
             checkboxLabel.dataset.taskName = task.name;
             checkboxLabel.addEventListener('click', (e) => {e.preventDefault();})
