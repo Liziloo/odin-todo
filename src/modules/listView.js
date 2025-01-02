@@ -44,7 +44,6 @@ function listView(selectedListName) {
 
     const listDiv = document.createElement('div');
     if (selectedListName !== 'all') {
-        console.log('triggered');
         const taskButton = document.createElement('button');
         taskButton.classList.add('.new-task-button');
         taskButton.textContent = 'Add task';
@@ -133,16 +132,30 @@ function listView(selectedListName) {
             const taskLi = document.createElement('li');
             const taskCheckbox = document.createElement('input');
             taskCheckbox.setAttribute('type', 'checkbox');
+            taskCheckbox.id = task.name;
             taskCheckbox.dataset.taskName = task.name;
             if (task.done) {
                 taskCheckbox.checked = true;
             }
             const checkboxLabel = document.createElement('label');
             checkboxLabel.textContent = task.name;
+            checkboxLabel.setAttribute('for', task.name);
             taskLi.append(taskCheckbox, checkboxLabel);
+            if (selectedListName !== 'all') {
+                const taskDeleteButton = document.createElement('button');
+                taskDeleteButton.textContent = 'x';
+                taskDeleteButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    selectedList.deleteTask(task.name);
+                    storeItem('lists', lists);
+                    listView(selectedListName);
+                });
+                taskLi.appendChild(taskDeleteButton);
+            }
             taskUl.appendChild(taskLi);
             taskCheckbox.addEventListener('click', (e) => {clickHandlerTaskCheckbox(e)});
         }
     }
+
     console.log(lists);
 }

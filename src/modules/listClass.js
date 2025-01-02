@@ -16,6 +16,10 @@ class List {
         const newTask = new Task(name, description, duedate, priority, notes, done);
         this.tasks.push(newTask);
     }
+
+    deleteTask(taskName) {
+        this.tasks = this.tasks.filter(task => task.name !== taskName);
+    }
 }
 Object.assign(List.prototype, toggler);
 
