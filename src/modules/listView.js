@@ -2,7 +2,6 @@
 import { initiateListsCollection, List } from "./listClass";
 import { openListModal } from "./newListModal";
 import { storeItem } from "./localStorage";
-import { taskList } from "./taskList";
 import { openTaskModal } from "./newTaskModal";
 export { listView };
 
@@ -79,10 +78,10 @@ function listView(selectedListName) {
             const taskPriority = formData.get('task-priority');
             const taskNotes = formData.get('task-notes');
             selectedList.addTask(taskName, taskDescription, taskDuedate, taskPriority, taskNotes);
-            storeItem('lists', JSON.stringify(lists));
+            storeItem('lists', lists);
             const modal = document.querySelector('.modal-background');
             modal.remove();
-            listView(selectedList);
+            listView(selectedListName);
         })
     }
 
@@ -128,8 +127,7 @@ function listView(selectedListName) {
                 }
             }
         } else {
-            taskList(newSelectedListName);
-                
+            listView(newSelectedListName);
         }
         
         

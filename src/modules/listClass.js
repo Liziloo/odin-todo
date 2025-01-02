@@ -24,7 +24,7 @@ const initiateListsCollection = () => {
         const defaultList = new List('Default');
         const newLists = [];
         newLists.push(defaultList);
-        storeItem('lists', JSON.stringify(newLists));
+        storeItem('lists', newLists);
         return newLists;
     } else {
         const existingLists = [];
