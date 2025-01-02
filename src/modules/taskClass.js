@@ -1,4 +1,3 @@
-import { toggler } from "./commonMethods";
 export { Task };
 
 class Task {
@@ -11,5 +10,3 @@ class Task {
         this.done = done
     }
 }
-
-Object.assign(Task.prototype, toggler)

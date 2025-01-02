@@ -161,8 +161,8 @@ function listView(selectedListName) {
         }
         taskUl.addEventListener('click', (e) => {
             const selectedTaskName = e.target.dataset.taskName;
+            if (!selectedTaskName || e.target.tagName !== 'LABEL') {return};
             const selectedTaskArray = tasks.filter((task) => task.name === selectedTaskName);
-            if (!selectedTaskName) {return};
             openTaskModal(selectedTaskArray[0]);
             const submitButton = document.querySelector('.task-submit-button');
             submitButton.addEventListener('click', (e) => {

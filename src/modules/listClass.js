@@ -1,4 +1,3 @@
-import { toggler } from "./commonMethods";
 import { Task } from "./taskClass";
 import { storeItem } from "./localStorage";
 export { List, initiateListsCollection };
@@ -32,7 +31,6 @@ class List {
         taskToEdit.done = done; 
     }
 }
-Object.assign(List.prototype, toggler);
 
 const initiateListsCollection = () => {
     if (!localStorage.getItem('lists')) {
