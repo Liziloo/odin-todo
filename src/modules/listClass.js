@@ -20,6 +20,17 @@ class List {
     deleteTask(taskName) {
         this.tasks = this.tasks.filter(task => task.name !== taskName);
     }
+
+    editTask(taskName, editedTaskName, description, duedate, priority, notes, done) {
+        const taskToEditArray = this.tasks.filter((task) => task.name === taskName);
+        const taskToEdit = taskToEditArray[0];
+        taskToEdit.name = editedTaskName;
+        taskToEdit.description = description;
+        taskToEdit.duedate = duedate;
+        taskToEdit.priority = priority;
+        taskToEdit.notes = notes;
+        taskToEdit.done = done; 
+    }
 }
 Object.assign(List.prototype, toggler);
 

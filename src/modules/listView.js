@@ -84,7 +84,8 @@ function listView(selectedListName) {
             const taskDuedate = new Date(formData.get('task-duedate'));
             const taskPriority = formData.get('task-priority');
             const taskNotes = formData.get('task-notes');
-            selectedList.addTask(taskName, taskDescription, taskDuedate, taskPriority, taskNotes, false);
+            const taskDone = formData.get('task-done');
+            selectedList.addTask(taskName, taskDescription, taskDuedate, taskPriority, taskNotes, taskDone);
             storeItem('lists', lists);
             const modal = document.querySelector('.modal-background');
             modal.remove();
@@ -140,6 +141,8 @@ function listView(selectedListName) {
             const checkboxLabel = document.createElement('label');
             checkboxLabel.textContent = task.name;
             checkboxLabel.setAttribute('for', task.name);
+            checkboxLabel.dataset.taskName = task.name;
+            checkboxLabel.addEventListener('click', (e) => {e.preventDefault();})
             taskLi.append(taskCheckbox, checkboxLabel);
             if (selectedListName !== 'all') {
                 const taskDeleteButton = document.createElement('button');
@@ -154,7 +157,31 @@ function listView(selectedListName) {
             }
             taskUl.appendChild(taskLi);
             taskCheckbox.addEventListener('click', (e) => {clickHandlerTaskCheckbox(e)});
+            
         }
+        taskUl.addEventListener('click', (e) => {
+            const selectedTaskName = e.target.dataset.taskName;
+            const selectedTaskArray = tasks.filter((task) => task.name === selectedTaskName);
+            if (!selectedTaskName) {return};
+            openTaskModal(selectedTaskArray[0]);
+            const submitButton = document.querySelector('.task-submit-button');
+            submitButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                const taskForm = document.querySelector('.task-form');
+                const formData = new FormData(taskForm);
+                const editedTaskName = formData.get('task-name');
+                const taskDescription = formData.get('task-description');
+                const taskDuedate = new Date(formData.get('task-duedate'));
+                const taskPriority = formData.get('task-priority');
+                const taskNotes = formData.get('task-notes');
+                const taskDone = formData.get('task-done');
+                selectedList.editTask(selectedTaskName, editedTaskName, taskDescription, taskDuedate, taskPriority, taskNotes, taskDone);
+                storeItem('lists', lists);
+                const modal = document.querySelector('.modal-background');
+                modal.remove();
+                listView(selectedListName);
+            })
+        })
     }
 
     console.log(lists);

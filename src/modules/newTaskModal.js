@@ -1,9 +1,10 @@
+import { format } from 'date-fns';
 export { openTaskModal };
 
 // Set the number of priority options available
 const priorityNumber = 5;
 
-const openTaskModal = () => {
+const openTaskModal = (task) => {
     const contentDiv = document.querySelector('#content');
     const modalBackgroundDiv = document.createElement('div');
     modalBackgroundDiv.classList.add('modal-background');
@@ -14,7 +15,12 @@ const openTaskModal = () => {
     modalHeader.classList.add('modal-header');
     const modalTitle = document.createElement('h3');
     modalTitle.classList.add('modal-title');
-    modalTitle.textContent = 'Add new task';
+    if (!task) {
+        modalTitle.textContent = 'Add new task';
+    } else {
+        modalTitle.textContent = task.name;
+    }
+    
     const closeButton = document.createElement('button');
     closeButton.classList.add('modal-close');
     closeButton.textContent = 'Close';
@@ -23,6 +29,15 @@ const openTaskModal = () => {
     const taskForm = document.createElement('form');
     taskForm.classList.add('task-form');
 
+    const taskDoneInput = document.createElement('input');
+    taskDoneInput.hidden = true;
+    taskDoneInput.name = 'task-done';
+    if (task) {
+        taskDoneInput.value = task.done;
+    } else {
+        taskDoneInput.value = false;
+    }
+
     const nameDiv = document.createElement('div');
     nameDiv.classList.add('task-name');
     const nameLabel = document.createElement('label');
@@ -30,6 +45,7 @@ const openTaskModal = () => {
     const nameInput = document.createElement('input');
     nameInput.required = true;
     nameInput.setAttribute('name', 'task-name');
+    nameInput.value = task ? task.name : null;
     nameDiv.append(nameLabel, nameInput);
 
     const descriptionDiv = document.createElement('div');
@@ -38,6 +54,7 @@ const openTaskModal = () => {
     descriptionLabel.textContent = 'Description:';
     const descriptionInput = document.createElement('input');
     descriptionInput.setAttribute('name', 'task-description');
+    descriptionInput.value = task ? task.description : null;
     descriptionDiv.append(descriptionLabel, descriptionInput);
 
     const duedateDiv = document.createElement('div');
@@ -46,7 +63,8 @@ const openTaskModal = () => {
     duedateLabel.textContent = 'Due date:';
     const duedateInput = document.createElement('input');
     duedateInput.setAttribute('name', 'task-duedate');
-    duedateInput.setAttribute('type', 'date');
+    duedateInput.setAttribute('type', 'datetime-local');
+    duedateInput.value = task ? format(task.duedate, "yyyy-MM-dd'T'HH:mm") : null;
     duedateDiv.append(duedateLabel, duedateInput);
 
     const priorityDiv = document.createElement('div');
@@ -61,6 +79,9 @@ const openTaskModal = () => {
         const priorityOption = document.createElement('option');
         priorityOption.value = i;
         priorityOption.textContent = i;
+        if (task) {
+            priorityOption.selected = i === task.priority ? true : false;
+        }
         prioritySelect.appendChild(priorityOption);
     }
     priorityDiv.append(priorityLabel, prioritySelect);
@@ -71,13 +92,14 @@ const openTaskModal = () => {
     notesLabel.textContent = 'Notes:';
     const notesInput = document.createElement('textarea');
     notesInput.setAttribute('name', 'task-notes');
+    notesInput.value = task ? task.notes : null;
     notesDiv.append(notesLabel, notesInput);
 
     const submitButton = document.createElement('button');
     submitButton.classList.add('task-submit-button');
-    submitButton.textContent = 'Add task';
+    submitButton.textContent = task? 'Save edits' : 'Add task';
 
-    taskForm.append(nameDiv, descriptionDiv, duedateDiv, priorityDiv, notesDiv, submitButton);
+    taskForm.append(taskDoneInput, nameDiv, descriptionDiv, duedateDiv, priorityDiv, notesDiv, submitButton);
 
     modalDiv.append(modalHeader, taskForm);
     modalBackgroundDiv.appendChild(modalDiv);
