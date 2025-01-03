@@ -5,12 +5,11 @@ import { openTaskModal } from "./newTaskModal";
 export { tasksView };
 
 
-const contentDiv = document.querySelector('#content');
-
-// Check if user already has lists in local storage, if not, create default list
-const lists = initiateListsCollection();
-
 const tasksView = (selectedListName) => {
+    const contentDiv = document.querySelector('#content');
+    
+    // Check if user already has lists in local storage, if not, create default list
+    const lists = initiateListsCollection();
     const selectedList = lists.find(selectedList => selectedList.name === selectedListName);
     
     contentDiv.textContent = '';

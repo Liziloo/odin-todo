@@ -3,10 +3,8 @@ import { storeItem } from "./localStorage";
 export { listsView };
 
 
-const contentDiv = document.querySelector('#content');
-
-
 const listsView = () => {
+    const contentDiv = document.querySelector('#content');
     contentDiv.textContent = '';
     const lists = initiateListsCollection();
 
