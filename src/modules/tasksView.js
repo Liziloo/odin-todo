@@ -112,10 +112,10 @@ const tasksView = (selectedListName) => {
             const formData = new FormData(listForm);
             const listName = formData.get('list-name');
             console.log(formData.get('list-duedate'))
-            const listDuedate = formData.get('list-duedate');
-            const formattedListDuedate = listDuedate === '' ? '' : new Date(listDuedate);
+            const listDuedate = new Date(formData.get('list-duedate'));
+            console.log(listDuedate);
             const listDescription = formData.get('list-description');
-            const newList = new List(listName, listDescription ? listDescription : '',formattedListDuedate);
+            const newList = new List(listName, listDescription ? listDescription : '',listDuedate);
             lists.push(newList);
             storeItem('lists', lists);
             const modal = document.querySelector('.modal-background');
@@ -146,17 +146,18 @@ const tasksView = (selectedListName) => {
             checkboxLabel.dataset.taskName = task.name;
             checkboxLabel.addEventListener('click', (e) => {e.preventDefault();})
             taskLi.append(taskCheckbox, checkboxLabel);
-            if (selectedListName !== 'all') {
-                const taskDeleteButton = document.createElement('button');
-                taskDeleteButton.textContent = 'x';
-                taskDeleteButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    selectedList.deleteTask(task.name);
-                    storeItem('lists', lists);
-                    tasksView(selectedListName);
-                });
-                taskLi.appendChild(taskDeleteButton);
-            }
+            const taskDeleteButton = document.createElement('button');
+            taskDeleteButton.textContent = 'x';
+            taskDeleteButton.dataset.listName = task.list;
+            taskDeleteButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetListName = e.target.dataset.listName;
+                const targetList = lists.filter((list) => list.name === targetListName)
+                targetList[0].deleteTask(task.name);
+                storeItem('lists', lists);
+                tasksView(selectedListName);
+            });
+            taskLi.appendChild(taskDeleteButton);
             taskUl.appendChild(taskLi);
             taskCheckbox.addEventListener('click', (e) => {clickHandlerTaskCheckbox(e)});
             

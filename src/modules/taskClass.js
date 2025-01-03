@@ -1,7 +1,8 @@
 export { Task };
 
 class Task {
-    constructor(name, description, duedate, priority, notes, done) {
+    constructor(list, name, description, duedate, priority, notes, done) {
+        this.list = list,
         this.name = name,
         this.description = description,
         this.duedate = duedate,

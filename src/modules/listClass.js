@@ -12,8 +12,8 @@ class List {
         this.done = false
     }
 
-    addTask(name, description, duedate, priority, notes, done) {
-        const newTask = new Task(name, description, duedate, priority, notes, done);
+    addTask(taskName, description, duedate, priority, notes, done) {
+        const newTask = new Task(this.name, taskName, description, duedate, priority, notes, done);
         this.tasks.push(newTask);
     }
 
@@ -34,14 +34,10 @@ class List {
 }
 
 const initiateListsCollection = () => {
+    const lists = [];
     if (!localStorage.getItem('lists')) {
-        const defaultList = new List('Default', '', '');
-        const newLists = [];
-        newLists.push(defaultList);
-        storeItem('lists', newLists);
-        return newLists;
+        storeItem('lists', lists);
     } else {
-        const existingLists = [];
         const jsonLists = JSON.parse(localStorage.getItem('lists'));
         for (let item of jsonLists) {
             const listDuedate = item.duedate === '' ? '' : new Date(item.duedate);
@@ -50,8 +46,8 @@ const initiateListsCollection = () => {
                 const taskDuedate = task.duedate === '' ? '' : new Date(task.duedate)
                 newInstance.addTask(task.name, task.description, taskDuedate, task.priority, task.notes, task.done);
             }
-            existingLists.push(newInstance);
+            lists.push(newInstance);
         }
-        return existingLists;
+        return lists;
     }
 }
