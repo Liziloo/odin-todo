@@ -112,10 +112,12 @@ const tasksView = (selectedListName) => {
             const formData = new FormData(listForm);
             const listName = formData.get('list-name');
             console.log(formData.get('list-duedate'))
-            const listDuedate = new Date(formData.get('list-duedate'));
+            console.log(typeof(formData.get('list-duedate')));
+            const listDuedate = formData.get('list-duedate');
             console.log(listDuedate);
+            console.log(typeof(listDuedate));
             const listDescription = formData.get('list-description');
-            const newList = new List(listName, listDescription ? listDescription : '',listDuedate);
+            const newList = new List(listName, listDescription ? listDescription : '', listDuedate !== '' ? new Date(listDuedate) : '');
             lists.push(newList);
             storeItem('lists', lists);
             const modal = document.querySelector('.modal-background');

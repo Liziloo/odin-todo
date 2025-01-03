@@ -10,12 +10,21 @@ const listsView = () => {
     contentDiv.textContent = '';
     const lists = initiateListsCollection();
 
-    const listsUl = document.createElement('ul');
+    const listsDiv = document.createElement('div');
     for (let list of lists) {
         const listLi = document.createElement('div');
         listLi.classList.add('list-div');
         const listName = document.createElement('div');
         listName.textContent = list.name;
+        const defaultRadio = document.createElement('input');
+        defaultRadio.setAttribute('type', 'radio');
+        defaultRadio.setAttribute('name', 'default-check');
+        defaultRadio.dataset.listName = list.name;
+        if (list.isDefault === true) {
+            defaultRadio.checked = true;
+        }
+        const defaultLabel = document.createElement('label');
+        defaultLabel.textContent = 'Default list';
         const listDuedate = document.createElement('div');
         listDuedate.textContent = `Due: ${list.duedate.toLocaleString()}`;
         const buttonDiv = document.createElement('div');
@@ -26,14 +35,35 @@ const listsView = () => {
         deleteButton.textContent = 'Delete';
         deleteButton.dataset.listName = list.name;
         deleteButton.addEventListener('click', (e) => {
+            e.preventDefault();
             const deleteListName = e.target.dataset.listName;
             const newLists = lists.filter(list => list.name !== deleteListName);
             storeItem('lists', newLists);
             listsView();
         })
         buttonDiv.append(editButton, deleteButton);
-        listLi.append(listName, listDuedate, buttonDiv);
-        listsUl.appendChild(listLi);
+        listLi.append(listName, defaultRadio, defaultLabel, listDuedate, buttonDiv);
+        listsDiv.appendChild(listLi);
     }
-    contentDiv.appendChild(listsUl);
+    contentDiv.appendChild(listsDiv);
+
+    const currentSelectedRadio = document.querySelector('input[name="default-check"]:checked');
+    console.log(currentSelectedRadio);
+    const defaultRadios = document.querySelectorAll('input[type="radio"]');
+    defaultRadios.forEach(radioButton => {
+        radioButton.addEventListener('change', (e) => {
+            const newDefaultListName = e.target.dataset.listName;
+            for (let list of lists) {
+                if (list.name === currentSelectedRadio.dataset.listName) {
+                    list.isDefault = false;
+                }
+                else if (list.name === newDefaultListName) {
+                    list.isDefault = true;
+                }
+            }
+            storeItem('lists', lists);
+            listsView();
+        })
+    })
+    
 }
