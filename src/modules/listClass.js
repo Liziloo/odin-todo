@@ -35,7 +35,7 @@ class List {
 
 const initiateListsCollection = () => {
     if (!localStorage.getItem('lists')) {
-        const defaultList = new List('Default', '');
+        const defaultList = new List('Default', '', '');
         const newLists = [];
         newLists.push(defaultList);
         storeItem('lists', newLists);
@@ -44,7 +44,7 @@ const initiateListsCollection = () => {
         const existingLists = [];
         const jsonLists = JSON.parse(localStorage.getItem('lists'));
         for (let item of jsonLists) {
-            const listDuedate = new Date(item.duedate);
+            const listDuedate = item.duedate === '' ? '' : new Date(item.duedate);
             const newInstance = new List(item.name, item.description, listDuedate);
             for (let task of item.tasks) {
                 const taskDuedate = task.duedate === '' ? '' : new Date(task.duedate)

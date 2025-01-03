@@ -1,9 +1,8 @@
-import { format } from "date-fns";
 import { initiateListsCollection, List } from "./listClass";
 import { openListModal } from "./newListModal";
 import { storeItem } from "./localStorage";
 import { openTaskModal } from "./newTaskModal";
-export { listView };
+export { tasksView };
 
 
 const contentDiv = document.querySelector('#content');
@@ -11,7 +10,7 @@ const contentDiv = document.querySelector('#content');
 // Check if user already has lists in local storage, if not, create default list
 const lists = initiateListsCollection();
 
-function listView(selectedListName) {
+const tasksView = (selectedListName) => {
     const selectedList = lists.find(selectedList => selectedList.name === selectedListName);
     
     contentDiv.textContent = '';
@@ -89,7 +88,7 @@ function listView(selectedListName) {
             storeItem('lists', lists);
             const modal = document.querySelector('.modal-background');
             modal.remove();
-            listView(selectedListName);
+            tasksView(selectedListName);
         })
     }
 
@@ -112,21 +111,23 @@ function listView(selectedListName) {
             const listForm = document.querySelector('.list-form');
             const formData = new FormData(listForm);
             const listName = formData.get('list-name');
-            const listDuedate = new Date(formData.get('list-duedate'));
+            console.log(formData.get('list-duedate'))
+            const listDuedate = formData.get('list-duedate');
+            const formattedListDuedate = listDuedate === '' ? '' : new Date(listDuedate);
             const listDescription = formData.get('list-description');
-            const newList = new List(listName, listDescription ? listDescription : '', listDuedate ? listDuedate : '');
+            const newList = new List(listName, listDescription ? listDescription : '',formattedListDuedate);
             lists.push(newList);
             storeItem('lists', lists);
             const modal = document.querySelector('.modal-background');
             modal.remove();
-            listView(listName);
+            tasksView(listName);
         })
     }
 
     function changeHandlerListSelect(e) {
         const newSelectedListName = e.target.value;
         taskUl.textContent = '';
-        listView(newSelectedListName);
+        tasksView(newSelectedListName);
     }
 
     function populateTaskList(tasks) {
@@ -140,7 +141,7 @@ function listView(selectedListName) {
                 taskCheckbox.checked = true;
             }
             const checkboxLabel = document.createElement('label');
-            checkboxLabel.textContent = `${task.name} ${format(task.duedate, "M/d/yyyy '@' h:maaa")}`;
+            checkboxLabel.textContent = `${task.name} Due: ${task.duedate.toLocaleString()}`;
             checkboxLabel.setAttribute('for', task.name);
             checkboxLabel.dataset.taskName = task.name;
             checkboxLabel.addEventListener('click', (e) => {e.preventDefault();})
@@ -152,7 +153,7 @@ function listView(selectedListName) {
                     e.preventDefault();
                     selectedList.deleteTask(task.name);
                     storeItem('lists', lists);
-                    listView(selectedListName);
+                    tasksView(selectedListName);
                 });
                 taskLi.appendChild(taskDeleteButton);
             }
@@ -180,10 +181,8 @@ function listView(selectedListName) {
                 storeItem('lists', lists);
                 const modal = document.querySelector('.modal-background');
                 modal.remove();
-                listView(selectedListName);
+                tasksView(selectedListName);
             })
         })
     }
-
-    console.log(lists);
 }

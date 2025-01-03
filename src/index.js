@@ -1,5 +1,16 @@
 import './styles/comeau-reset.css';
 import './styles/styles.css';
-import { listView } from './modules/listView';
+import { tasksView } from './modules/tasksView';
+import { listsView } from './modules/listsView';
 
-listView('Default');
+
+(function() {
+    // Always begin on tasks page
+    tasksView('Default');
+
+    const tasksButton = document.querySelector('#tasks-button');
+    tasksButton.addEventListener('click', () => {tasksView('Default')});
+    const listsButton = document.querySelector('#projects-button');
+    listsButton.addEventListener('click', () => {listsView()})
+}) ();
+
