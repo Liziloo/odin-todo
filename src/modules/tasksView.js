@@ -1,7 +1,7 @@
 import { initiateListsCollection, List } from "./listClass";
 import { openListModal } from "./newListModal";
 import { storeItem } from "./localStorage";
-import { openTaskModal } from "./newTaskModal";
+import { openTaskModal } from "./taskModal";
 export { tasksView };
 
 
@@ -167,13 +167,19 @@ const tasksView = (selectedListName) => {
             const selectedTaskName = e.target.dataset.taskName;
             if (!selectedTaskName || e.target.tagName !== 'LABEL') {return};
             const selectedTaskArray = tasks.filter((task) => task.name === selectedTaskName);
-            openTaskModal(selectedTaskArray[0]);
+            const selectedTask = selectedTaskArray[0];
+            openTaskModal(selectedTask);
             const submitButton = document.querySelector('.task-submit-button');
             submitButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 const taskForm = document.querySelector('.task-form');
                 const formData = new FormData(taskForm);
                 const editedTaskName = formData.get('task-name');
+                const editedTaskListName = formData.get('task-list-name');
+                if (editedTaskListName !== selectedTask.list) {
+                    console.log(editedTaskListName);
+                    selectedTask.move(editedTaskListName);
+                }
                 const taskDescription = formData.get('task-description');
                 const taskDuedate = new Date(formData.get('task-duedate'));
                 const taskPriority = formData.get('task-priority');
@@ -187,4 +193,5 @@ const tasksView = (selectedListName) => {
             })
         })
     }
+
 }

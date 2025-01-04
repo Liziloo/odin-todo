@@ -1,10 +1,13 @@
 import { format } from 'date-fns';
+import { initiateListsCollection } from './listClass';
 export { openTaskModal };
 
 // Set the number of priority options available
 const priorityNumber = 5;
 
 const openTaskModal = (task) => {
+    const lists = initiateListsCollection();
+
     const contentDiv = document.querySelector('#content');
     const modalBackgroundDiv = document.createElement('div');
     modalBackgroundDiv.classList.add('modal-background');
@@ -47,6 +50,27 @@ const openTaskModal = (task) => {
     nameInput.setAttribute('name', 'task-name');
     nameInput.value = task ? task.name : null;
     nameDiv.append(nameLabel, nameInput);
+
+    const listsDiv = document.createElement('div');
+    const listsSelectLabel = document.createElement('label');
+    listsSelectLabel.textContent = 'Add to List:';
+    listsSelectLabel.setAttribute('for', 'task-list-name');
+    const listsSelect = document.createElement('select');
+    listsSelect.setAttribute('name', 'task-list-name');
+    listsSelect.id = 'task-list';
+    for (let list of lists) {
+        const listOption = document.createElement('option');
+        listOption.value = list.name;
+        listOption.textContent = list.name;
+        if (task) {
+            if (list.name === task.list) {
+                listOption.selected = true;
+            }
+        }
+        listsSelect.appendChild(listOption);
+    }
+    listsDiv.append(listsSelectLabel, listsSelect);
+
 
     const descriptionDiv = document.createElement('div');
     descriptionDiv.classList.add('task-description');
@@ -99,7 +123,7 @@ const openTaskModal = (task) => {
     submitButton.classList.add('task-submit-button');
     submitButton.textContent = task? 'Save edits' : 'Add task';
 
-    taskForm.append(taskDoneInput, nameDiv, descriptionDiv, duedateDiv, priorityDiv, notesDiv, submitButton);
+    taskForm.append(taskDoneInput, nameDiv, listsDiv, descriptionDiv, duedateDiv, priorityDiv, notesDiv, submitButton);
 
     modalDiv.append(modalHeader, taskForm);
     modalBackgroundDiv.appendChild(modalDiv);
