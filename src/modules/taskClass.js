@@ -1,6 +1,3 @@
-import { initiateListsCollection } from "./listClass";
-import { storeItem } from "./localStorage";
-
 export { Task };
 
 class Task {
@@ -14,19 +11,15 @@ class Task {
         this.done = done
     }
 
-    move(newListName) {
-        console.log(newListName);
-        const lists = initiateListsCollection();
-        console.log(lists);
+    move(newListName, lists) {
         for (let list of lists) {
+            if (list.name === this.list) {
+                list.deleteTask(this);
+            }
             if (list.name === newListName) {
                 list.tasks.push(this);
             }
-            if (list.name === this.list) {
-                list.deleteTask(this.name);
-            }
-            this.list = newListName;
         }
-        storeItem('lists', lists);
+        this.list = newListName;
     }
 }

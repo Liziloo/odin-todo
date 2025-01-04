@@ -7,18 +7,18 @@ import { initiateListsCollection } from './modules/listClass';
 
 (function() {
     // Always begin on tasks page of default list
-    const initialLists = initiateListsCollection();
-    for (let list of initialLists) {
+    const lists = initiateListsCollection();
+    for (let list of lists) {
         if (list.isDefault) {
-            tasksView(list.name);
+            tasksView(list.name, lists);
             break
         }
     }
     
 
     const tasksButton = document.querySelector('#tasks-button');
-    tasksButton.addEventListener('click', () => {tasksView('all')});
+    tasksButton.addEventListener('click', () => {tasksView('all', lists)});
     const listsButton = document.querySelector('#projects-button');
-    listsButton.addEventListener('click', () => {listsView()})
+    listsButton.addEventListener('click', () => {listsView(lists)})
 }) ();
 

@@ -1,16 +1,16 @@
-import { initiateListsCollection, List } from "./listClass";
+import { List } from "./listClass";
 import { openListModal } from "./newListModal";
 import { storeItem } from "./localStorage";
 import { openTaskModal } from "./taskModal";
+import { isValidDate } from "./dateTime";
 export { tasksView };
 
 
-const tasksView = (selectedListName) => {
+const tasksView = (selectedListName, lists) => {
     const contentDiv = document.querySelector('#content');
     
     // Check if user already has lists in local storage, if not, create default list
-    const lists = initiateListsCollection();
-    const selectedList = lists.find(selectedList => selectedList.name === selectedListName);
+    const selectedList = lists.find(list => list.name === selectedListName);
     
     contentDiv.textContent = '';
 
@@ -71,7 +71,7 @@ const tasksView = (selectedListName) => {
 
     function clickHandlerNewTask(e) {
         e.preventDefault();
-        openTaskModal();
+        openTaskModal(null, lists);
         const submitButton = document.querySelector('.task-submit-button');
         submitButton.addEventListener('click', (e) => {
             e.preventDefault();
@@ -79,7 +79,8 @@ const tasksView = (selectedListName) => {
             const formData = new FormData(taskForm);
             const taskName = formData.get('task-name');
             const taskDescription = formData.get('task-description');
-            const taskDuedate = new Date(formData.get('task-duedate'));
+            const formDueDate = new Date(formData.get('task-duedate'));
+            const taskDuedate = isValidDate(formDueDate) ? formDueDate : '';
             const taskPriority = formData.get('task-priority');
             const taskNotes = formData.get('task-notes');
             const taskDone = formData.get('task-done');
@@ -87,7 +88,7 @@ const tasksView = (selectedListName) => {
             storeItem('lists', lists);
             const modal = document.querySelector('.modal-background');
             modal.remove();
-            tasksView(selectedListName);
+            tasksView(selectedListName, lists);
         })
     }
 
@@ -121,14 +122,14 @@ const tasksView = (selectedListName) => {
             storeItem('lists', lists);
             const modal = document.querySelector('.modal-background');
             modal.remove();
-            tasksView(listName);
+            tasksView(listName, lists);
         })
     }
 
     function changeHandlerListSelect(e) {
         const newSelectedListName = e.target.value;
         taskUl.textContent = '';
-        tasksView(newSelectedListName);
+        tasksView(newSelectedListName, lists);
     }
 
     function populateTaskList(tasks) {
@@ -156,7 +157,7 @@ const tasksView = (selectedListName) => {
                 const targetList = lists.filter((list) => list.name === targetListName)
                 targetList[0].deleteTask(task.name);
                 storeItem('lists', lists);
-                tasksView(selectedListName);
+                tasksView(selectedListName, lists);
             });
             taskLi.appendChild(taskDeleteButton);
             taskUl.appendChild(taskLi);
@@ -168,7 +169,7 @@ const tasksView = (selectedListName) => {
             if (!selectedTaskName || e.target.tagName !== 'LABEL') {return};
             const selectedTaskArray = tasks.filter((task) => task.name === selectedTaskName);
             const selectedTask = selectedTaskArray[0];
-            openTaskModal(selectedTask);
+            openTaskModal(selectedTask, lists);
             const submitButton = document.querySelector('.task-submit-button');
             submitButton.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -176,22 +177,23 @@ const tasksView = (selectedListName) => {
                 const formData = new FormData(taskForm);
                 const editedTaskName = formData.get('task-name');
                 const editedTaskListName = formData.get('task-list-name');
-                if (editedTaskListName !== selectedTask.list) {
-                    console.log(editedTaskListName);
-                    selectedTask.move(editedTaskListName);
-                }
+                
                 const taskDescription = formData.get('task-description');
-                const taskDuedate = new Date(formData.get('task-duedate'));
+                const formDueDate = new Date(formData.get('task-duedate'));
+                const taskDuedate = isValidDate(formDueDate) ? formDueDate : '';
                 const taskPriority = formData.get('task-priority');
                 const taskNotes = formData.get('task-notes');
                 const taskDone = formData.get('task-done');
                 selectedList.editTask(selectedTaskName, editedTaskName, taskDescription, taskDuedate, taskPriority, taskNotes, taskDone);
+                if (editedTaskListName !== selectedTask.list) {
+                    selectedTask.move(editedTaskListName, lists);
+                }
                 storeItem('lists', lists);
                 const modal = document.querySelector('.modal-background');
                 modal.remove();
-                tasksView(selectedListName);
+                tasksView(selectedListName, lists);
             })
         })
     }
-
+    console.log('tasks-view lists', lists);
 }

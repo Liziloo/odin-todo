@@ -1,12 +1,11 @@
-import { initiateListsCollection } from "./listClass";
+
 import { storeItem } from "./localStorage";
 export { listsView };
 
 
-const listsView = () => {
+const listsView = (lists) => {
     const contentDiv = document.querySelector('#content');
     contentDiv.textContent = '';
-    const lists = initiateListsCollection();
 
     const listsDiv = document.createElement('div');
     for (let list of lists) {

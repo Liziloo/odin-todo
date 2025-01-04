@@ -1,12 +1,11 @@
 import { format } from 'date-fns';
-import { initiateListsCollection } from './listClass';
+import { isValidDate } from './dateTime';
 export { openTaskModal };
 
 // Set the number of priority options available
 const priorityNumber = 5;
 
-const openTaskModal = (task) => {
-    const lists = initiateListsCollection();
+const openTaskModal = (task, lists) => {
 
     const contentDiv = document.querySelector('#content');
     const modalBackgroundDiv = document.createElement('div');
@@ -88,7 +87,7 @@ const openTaskModal = (task) => {
     const duedateInput = document.createElement('input');
     duedateInput.setAttribute('name', 'task-duedate');
     duedateInput.setAttribute('type', 'datetime-local');
-    duedateInput.value = task ? format(task.duedate, "yyyy-MM-dd'T'HH:mm") : null;
+    duedateInput.value = task && isValidDate(task.duedate) ? format(task.duedate, "yyyy-MM-dd'T'HH:mm") : null;
     duedateDiv.append(duedateLabel, duedateInput);
 
     const priorityDiv = document.createElement('div');

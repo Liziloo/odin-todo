@@ -18,8 +18,8 @@ class List {
         this.tasks.push(newTask);
     }
 
-    deleteTask(taskName) {
-        this.tasks = this.tasks.filter(task => task.name !== taskName);
+    deleteTask(task) {
+        this.tasks = this.tasks.filter(existingTask => existingTask !== task);
     }
 
     editTask(taskName, editedTaskName, description, duedate, priority, notes, done) {
