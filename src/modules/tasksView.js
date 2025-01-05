@@ -2,6 +2,7 @@ import { openListModal } from "./newListModal";
 import { storeItem } from "./localStorage";
 import { openTaskModal } from "./taskModal";
 import { isValidDate } from "./dateTime";
+import { allTasksDone } from "./listClass";
 export { tasksView };
 
 
@@ -98,7 +99,11 @@ const tasksView = (selectedListName, lists) => {
         } else {
             checkedTask.done = false;
         }
+        if (allTasksDone(selectedList)) {
+            selectedList.done = true;
+        }
         storeItem('lists', lists);
+        tasksView(selectedListName, lists);
     }
 
     function clickHandlerNewList(e) {

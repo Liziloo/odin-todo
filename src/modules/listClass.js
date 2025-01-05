@@ -1,7 +1,7 @@
 import { Task } from "./taskClass";
 import { storeItem } from "./localStorage";
 import { isValidDate } from "./dateTime";
-export { List, initiateListsCollection, handleListChange };
+export { List, initiateListsCollection, handleListChange, allTasksDone };
 
 
 class List {
@@ -71,4 +71,15 @@ const handleListChange = (formData, list, lists) => {
     }
     storeItem('lists', lists);
     return listName;
+}
+
+const allTasksDone = (list) => {
+    for (let task of list.tasks) {
+        if (!task.done) {
+            return false;
+        } else {
+            continue
+        }
+    }
+    return true;
 }
