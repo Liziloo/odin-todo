@@ -1,4 +1,3 @@
-import { List } from "./listClass";
 import { openListModal } from "./newListModal";
 import { storeItem } from "./localStorage";
 import { openTaskModal } from "./taskModal";
@@ -80,7 +79,7 @@ const tasksView = (selectedListName, lists) => {
             const taskName = formData.get('task-name');
             const taskDescription = formData.get('task-description');
             const formDueDate = new Date(formData.get('task-duedate'));
-            const taskDuedate = isValidDate(formDueDate) ? formDueDate : '';
+            const taskDuedate = isValidDate(formDueDate) ? formDueDate : 'None';
             const taskPriority = formData.get('task-priority');
             const taskNotes = formData.get('task-notes');
             const taskDone = formData.get('task-done');
@@ -104,26 +103,7 @@ const tasksView = (selectedListName, lists) => {
 
     function clickHandlerNewList(e) {
         e.preventDefault();
-        openListModal();
-        const submitButton = document.querySelector('.list-submit-button');
-        submitButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            const listForm = document.querySelector('.list-form');
-            const formData = new FormData(listForm);
-            const listName = formData.get('list-name');
-            console.log(formData.get('list-duedate'))
-            console.log(typeof(formData.get('list-duedate')));
-            const listDuedate = formData.get('list-duedate');
-            console.log(listDuedate);
-            console.log(typeof(listDuedate));
-            const listDescription = formData.get('list-description');
-            const newList = new List(listName, listDescription ? listDescription : '', listDuedate !== '' ? new Date(listDuedate) : '');
-            lists.push(newList);
-            storeItem('lists', lists);
-            const modal = document.querySelector('.modal-background');
-            modal.remove();
-            tasksView(listName, lists);
-        })
+        openListModal(null, lists);
     }
 
     function changeHandlerListSelect(e) {
@@ -180,7 +160,7 @@ const tasksView = (selectedListName, lists) => {
                 
                 const taskDescription = formData.get('task-description');
                 const formDueDate = new Date(formData.get('task-duedate'));
-                const taskDuedate = isValidDate(formDueDate) ? formDueDate : '';
+                const taskDuedate = isValidDate(formDueDate) ? formDueDate : 'None';
                 const taskPriority = formData.get('task-priority');
                 const taskNotes = formData.get('task-notes');
                 const taskDone = formData.get('task-done');

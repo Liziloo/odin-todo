@@ -36,7 +36,7 @@ const listsView = (lists) => {
             const deleteListName = e.target.dataset.listName;
             const newLists = lists.filter(list => list.name !== deleteListName);
             storeItem('lists', newLists);
-            listsView();
+            listsView(newLists);
         })
         buttonDiv.append(editButton, deleteButton);
         listLi.append(listName, defaultRadio, defaultLabel, listDuedate, buttonDiv);
@@ -45,9 +45,8 @@ const listsView = (lists) => {
     contentDiv.appendChild(listsDiv);
 
     const currentSelectedRadio = document.querySelector('input[name="default-check"]:checked');
-    console.log(currentSelectedRadio);
     const defaultRadios = document.querySelectorAll('input[type="radio"]');
-    defaultRadios.forEach(radioButton => {
+    defaultRadios.forEach((radioButton) => {
         radioButton.addEventListener('change', (e) => {
             const newDefaultListName = e.target.dataset.listName;
             for (let list of lists) {

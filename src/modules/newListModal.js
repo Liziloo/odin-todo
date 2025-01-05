@@ -1,8 +1,10 @@
 import { format } from "date-fns";
+import { tasksView } from "./tasksView";
+import { handleNewList } from "./listClass";
 export { openListModal };
 
 
-const openListModal = (list) => {
+const openListModal = (list, lists) => {
     const contentDiv = document.querySelector('#content');
     const modalBackgroundDiv = document.createElement('div');
     modalBackgroundDiv.classList.add('modal-background');
@@ -66,6 +68,13 @@ const openListModal = (list) => {
         listModal.remove();
     }
     
-    
+    submitButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const listForm = document.querySelector('.list-form');
+        const formData = new FormData(listForm);
+        const newListName = handleNewList(formData, lists);
+        modalBackgroundDiv.remove();
+        tasksView(newListName, lists);
+    })
 
 }

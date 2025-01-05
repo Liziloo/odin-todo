@@ -3,6 +3,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { watchFile } = require('fs');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -18,10 +19,9 @@ const config = {
         path: path.resolve(__dirname, 'dist'),
         clean: true,
     },
+    devtool: 'eval-source-map',
     devServer: {
-        open: true,
-        hot: true,
-        host: 'localhost',
+        watchFiles: ['./index.html'],
     },
     plugins: [
         new HtmlWebpackPlugin({
@@ -65,7 +65,7 @@ module.exports = () => {
         
         
     } else {
-        config.mode = 'development';
+        config.mode = 'development'
     }
     return config;
 };

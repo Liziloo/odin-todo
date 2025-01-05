@@ -1,6 +1,7 @@
 import { Task } from "./taskClass";
 import { storeItem } from "./localStorage";
-export { List, initiateListsCollection };
+import { isValidDate } from "./dateTime";
+export { List, initiateListsCollection, handleNewList };
 
 
 class List {
@@ -37,20 +38,31 @@ class List {
 const initiateListsCollection = () => {
     const lists = [];
     if (!localStorage.getItem('lists')) {
-        const defaultList = new List('My list', '', '', true);
+        const defaultList = new List('My list', '', 'None', true);
         lists.push(defaultList);
         storeItem('lists', lists);
     } else {
         const jsonLists = JSON.parse(localStorage.getItem('lists'));
         for (let item of jsonLists) {
-            const listDuedate = item.duedate === '' ? '' : new Date(item.duedate);
+            const listDuedate = item.duedate === 'None' ? 'None' : new Date(item.duedate);
             const newInstance = new List(item.name, item.description, listDuedate, item.isDefault);
             for (let task of item.tasks) {
-                const taskDuedate = task.duedate === '' ? '' : new Date(task.duedate)
+                const taskDuedate = task.duedate === 'None' ? 'None' : new Date(task.duedate)
                 newInstance.addTask(task.name, task.description, taskDuedate, task.priority, task.notes, task.done);
             }
             lists.push(newInstance);
         }
     }
     return lists;
+}
+
+const handleNewList = (formData, lists) => {
+    const listName = formData.get('list-name');
+    const formDuedate = new Date(formData.get('list-duedate'));
+    const listDuedate = isValidDate(formDuedate) ? formDuedate : 'None';
+    const listDescription = formData.get('list-description');
+    const newList = new List(listName, listDescription ? listDescription : '', listDuedate);
+    lists.push(newList);
+    storeItem('lists', lists);
+    return listName;
 }
