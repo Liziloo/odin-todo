@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { tasksView } from "./tasksView";
-import { handleNewList } from "./listClass";
+import { handleListChange } from "./listClass";
+import { isValidDate } from "./dateTime";
 export { openListModal };
 
 
@@ -31,6 +32,7 @@ const openListModal = (list, lists) => {
     const nameInput = document.createElement('input');
     nameInput.required = true;
     nameInput.setAttribute('name', 'list-name');
+    nameInput.value = list ? list.name : '';
     nameDiv.append(nameLabel, nameInput);
 
     const duedateDiv = document.createElement('div');
@@ -40,7 +42,7 @@ const openListModal = (list, lists) => {
     const duedateInput = document.createElement('input');
     duedateInput.setAttribute('type', 'datetime-local');
     duedateInput.setAttribute('name', 'list-duedate');
-    duedateInput.value = list ? format(list.duedate, "yyyy-MM-dd'T'HH:mm") : null;
+    duedateInput.value = list && isValidDate(list.duedate) ? format(list.duedate, "yyyy-MM-dd'T'HH:mm") : '';
     duedateDiv.append(duedateLabel, duedateInput);
 
     const descriptionDiv = document.createElement('div');
@@ -49,6 +51,7 @@ const openListModal = (list, lists) => {
     descriptionLabel.textContent = 'Description:';
     const descriptionInput = document.createElement('input');
     descriptionInput.setAttribute('name', 'list-description');
+    descriptionInput.value = list ? list.description : '';
     descriptionDiv.append(descriptionLabel, descriptionInput);
 
     const submitButton = document.createElement('button');
@@ -72,7 +75,7 @@ const openListModal = (list, lists) => {
         e.preventDefault();
         const listForm = document.querySelector('.list-form');
         const formData = new FormData(listForm);
-        const newListName = handleNewList(formData, lists);
+        const newListName = handleListChange(formData, list ? list : null, lists);
         modalBackgroundDiv.remove();
         tasksView(newListName, lists);
     })

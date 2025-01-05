@@ -1,5 +1,6 @@
 
 import { storeItem } from "./localStorage";
+import { openListModal } from "./newListModal";
 export { listsView };
 
 
@@ -28,6 +29,10 @@ const listsView = (lists) => {
         buttonDiv.classList.add('button-div');
         const editButton = document.createElement('button');
         editButton.textContent = 'Edit';
+        editButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            openListModal(list, lists);
+        })
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
         deleteButton.dataset.listName = list.name;

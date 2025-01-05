@@ -1,7 +1,7 @@
 import { Task } from "./taskClass";
 import { storeItem } from "./localStorage";
 import { isValidDate } from "./dateTime";
-export { List, initiateListsCollection, handleNewList };
+export { List, initiateListsCollection, handleListChange };
 
 
 class List {
@@ -56,13 +56,19 @@ const initiateListsCollection = () => {
     return lists;
 }
 
-const handleNewList = (formData, lists) => {
+const handleListChange = (formData, list, lists) => {
     const listName = formData.get('list-name');
     const formDuedate = new Date(formData.get('list-duedate'));
     const listDuedate = isValidDate(formDuedate) ? formDuedate : 'None';
     const listDescription = formData.get('list-description');
-    const newList = new List(listName, listDescription ? listDescription : '', listDuedate);
-    lists.push(newList);
+    if (list) {
+        list.name = listName;
+        list.duedate = listDuedate;
+        list.description = listDescription;
+    } else {
+        const newList = new List(listName, listDescription ? listDescription : '', listDuedate);
+        lists.push(newList);
+    }
     storeItem('lists', lists);
     return listName;
 }
