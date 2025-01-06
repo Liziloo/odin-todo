@@ -63,7 +63,7 @@ const listsView = (lists) => {
                 }
             }
             storeItem('lists', lists);
-            listsView();
+            listsView(lists);
         })
     })
     
