@@ -1,11 +1,13 @@
 import { format } from 'date-fns';
 import { isValidDate } from './dateTime';
+import { handleTaskSubmit } from './taskClass';
 export { openTaskModal };
 
 // Set the number of priority options available
 const priorityNumber = 5;
 
 const openTaskModal = (task, lists) => {
+    const taskButton = document.querySelector('.new-task-button');
 
     const contentDiv = document.querySelector('#content');
     const modalBackgroundDiv = document.createElement('div');
@@ -61,10 +63,8 @@ const openTaskModal = (task, lists) => {
         const listOption = document.createElement('option');
         listOption.value = list.name;
         listOption.textContent = list.name;
-        if (task) {
-            if (list.name === task.list) {
-                listOption.selected = true;
-            }
+        if (list.name === taskButton.getAttribute('data-list-name')) {
+            listOption.selected = true;
         }
         listsSelect.appendChild(listOption);
     }
@@ -128,11 +128,17 @@ const openTaskModal = (task, lists) => {
     modalBackgroundDiv.appendChild(modalDiv);
     contentDiv.appendChild(modalBackgroundDiv);
 
+    submitButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const taskForm = document.querySelector('.task-form');
+        const formData = new FormData(taskForm);
+        handleTaskSubmit(formData, task ? task : null, lists);
+    })
+
     closeButton.addEventListener('click', handleCloseModal);
 
     function handleCloseModal() {
-        const taskModal = document.querySelector('.modal-background');
-        taskModal.remove();
+        modalBackgroundDiv.remove();
     }
     
     

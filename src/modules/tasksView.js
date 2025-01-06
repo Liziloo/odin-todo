@@ -41,11 +41,11 @@ const tasksView = (selectedListName, lists) => {
     listSelect.addEventListener('change', (e) => {changeHandlerListSelect(e)});
 
     const listDiv = document.createElement('div');
+    const taskButton = document.createElement('button');
     if (selectedListName !== 'all') {
-        const taskButton = document.createElement('button');
-        taskButton.classList.add('.new-task-button');
+        taskButton.classList.add('new-task-button');
         taskButton.textContent = 'Add task';
-        taskButton.dataset.list = selectedListName;
+        taskButton.dataset.listName = selectedListName;
         taskButton.addEventListener('click', (e) => {clickHandlerNewTask(e)});
         listDiv.appendChild(taskButton);
     }
@@ -72,24 +72,6 @@ const tasksView = (selectedListName, lists) => {
     function clickHandlerNewTask(e) {
         e.preventDefault();
         openTaskModal(null, lists);
-        const submitButton = document.querySelector('.task-submit-button');
-        submitButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            const taskForm = document.querySelector('.task-form');
-            const formData = new FormData(taskForm);
-            const taskName = formData.get('task-name');
-            const taskDescription = formData.get('task-description');
-            const formDueDate = new Date(formData.get('task-duedate'));
-            const taskDuedate = isValidDate(formDueDate) ? formDueDate : 'None';
-            const taskPriority = formData.get('task-priority');
-            const taskNotes = formData.get('task-notes');
-            const taskDone = formData.get('task-done');
-            selectedList.addTask(taskName, taskDescription, taskDuedate, taskPriority, taskNotes, taskDone);
-            storeItem('lists', lists);
-            const modal = document.querySelector('.modal-background');
-            modal.remove();
-            tasksView(selectedListName, lists);
-        })
     }
 
     function clickHandlerTaskCheckbox(e) {
@@ -124,6 +106,7 @@ const tasksView = (selectedListName, lists) => {
             taskCheckbox.setAttribute('type', 'checkbox');
             taskCheckbox.id = task.name;
             taskCheckbox.dataset.taskName = task.name;
+            console.log(task);
             if (task.done) {
                 taskCheckbox.checked = true;
             }
@@ -139,8 +122,8 @@ const tasksView = (selectedListName, lists) => {
             taskDeleteButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 const targetListName = e.target.dataset.listName;
-                const targetList = lists.filter((list) => list.name === targetListName)
-                targetList[0].deleteTask(task.name);
+                const targetList = lists.find((list) => list.name === targetListName);
+                targetList.deleteTask(task);
                 storeItem('lists', lists);
                 tasksView(selectedListName, lists);
             });

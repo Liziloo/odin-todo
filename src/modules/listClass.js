@@ -23,15 +23,8 @@ class List {
         this.tasks = this.tasks.filter(existingTask => existingTask !== task);
     }
 
-    editTask(taskName, editedTaskName, description, duedate, priority, notes, done) {
-        const taskToEditArray = this.tasks.filter((task) => task.name === taskName);
-        const taskToEdit = taskToEditArray[0];
-        taskToEdit.name = editedTaskName;
-        taskToEdit.description = description;
-        taskToEdit.duedate = duedate;
-        taskToEdit.priority = priority;
-        taskToEdit.notes = notes;
-        taskToEdit.done = done; 
+    sortedByDate() {
+        return this.tasks.toSorted((a, b) => a.getDistance() - b.getDistance());
     }
 }
 
@@ -47,8 +40,9 @@ const initiateListsCollection = () => {
             const listDuedate = item.duedate === 'None' ? 'None' : new Date(item.duedate);
             const newInstance = new List(item.name, item.description, listDuedate, item.isDefault);
             for (let task of item.tasks) {
-                const taskDuedate = task.duedate === 'None' ? 'None' : new Date(task.duedate)
-                newInstance.addTask(task.name, task.description, taskDuedate, task.priority, task.notes, task.done);
+                const taskDuedate = task.duedate === 'None' ? 'None' : new Date(task.duedate);
+                const taskDone = task.done === 'true' || task.done === true ? true : false;
+                newInstance.addTask(task.name, task.description, taskDuedate, task.priority, task.notes, taskDone);
             }
             lists.push(newInstance);
         }

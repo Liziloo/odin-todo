@@ -76,7 +76,6 @@ const openListModal = (list, lists) => {
         const listForm = document.querySelector('.list-form');
         const formData = new FormData(listForm);
         const newListName = handleListChange(formData, list ? list : null, lists);
-        modalBackgroundDiv.remove();
         tasksView(newListName, lists);
     })
 

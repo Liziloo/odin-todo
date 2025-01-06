@@ -22,7 +22,7 @@ const listsView = (lists) => {
             defaultRadio.checked = true;
         }
         const defaultLabel = document.createElement('label');
-        defaultLabel.textContent = 'Default list';
+        defaultLabel.textContent = 'Make default';
         const listDuedate = document.createElement('div');
         listDuedate.textContent = `Due: ${list.duedate.toLocaleString()}`;
         const buttonDiv = document.createElement('div');
