@@ -1,4 +1,5 @@
 
+import { deleteList } from "./listClass";
 import { storeItem } from "./localStorage";
 import { openListModal } from "./newListModal";
 export { listsView };
@@ -37,10 +38,9 @@ const listsView = (lists) => {
         deleteButton.textContent = 'Delete';
         deleteButton.dataset.listName = list.name;
         deleteButton.addEventListener('click', (e) => {
-            e.preventDefault();
+            e.preventDefault();        
             const deleteListName = e.target.dataset.listName;
-            const newLists = lists.filter(list => list.name !== deleteListName);
-            storeItem('lists', newLists);
+            const newLists = deleteList(deleteListName, lists);
             listsView(newLists);
         })
         buttonDiv.append(editButton, deleteButton);

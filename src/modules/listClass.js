@@ -1,16 +1,17 @@
 import { Task } from "./taskClass";
 import { storeItem } from "./localStorage";
 import { isValidDate } from "./dateTime";
-export { List, initiateListsCollection, handleListChange, allTasksDone };
+import { listsView } from "./listsView";
+export { List, initiateListsCollection, handleListChange, allTasksDone, deleteList };
 
 
 class List {
-    constructor(name, description, duedate, isDefault) {
+    constructor(name, description, duedate, isDefault, isDone) {
         this.name = name,
         this.description = description,
         this.tasks = [],
         this.duedate = duedate,
-        this.done = false,
+        this.done = isDone ? isDone : false,
         this.isDefault = isDefault ? isDefault : false;
     }
 
@@ -38,7 +39,8 @@ const initiateListsCollection = () => {
         const jsonLists = JSON.parse(localStorage.getItem('lists'));
         for (let item of jsonLists) {
             const listDuedate = item.duedate === 'None' ? 'None' : new Date(item.duedate);
-            const newInstance = new List(item.name, item.description, listDuedate, item.isDefault);
+            const listDone = item.done === false || item.done === 'false' ? false : true;
+            const newInstance = new List(item.name, item.description, listDuedate, item.isDefault, listDone);
             for (let task of item.tasks) {
                 const taskDuedate = task.duedate === 'None' ? 'None' : new Date(task.duedate);
                 const taskDone = task.done === 'true' || task.done === true ? true : false;
@@ -76,4 +78,10 @@ const allTasksDone = (list) => {
         }
     }
     return true;
+}
+
+const deleteList = (listName, lists) => {
+    const newLists = lists.filter(list => list.name !== listName);
+    storeItem('lists', newLists);
+    return newLists;
 }
