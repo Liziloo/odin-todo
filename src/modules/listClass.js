@@ -1,8 +1,7 @@
 import { Task } from "./taskClass";
 import { storeItem } from "./localStorage";
 import { isValidDate } from "./dateTime";
-import { listsView } from "./listsView";
-export { List, initiateListsCollection, handleListChange, allTasksDone, deleteList };
+export { List, initiateListsCollection, handleListChange, allTasksDone, deleteList, changeDefaultList };
 
 
 class List {
@@ -84,4 +83,17 @@ const deleteList = (listName, lists) => {
     const newLists = lists.filter(list => list.name !== listName);
     storeItem('lists', newLists);
     return newLists;
+}
+
+const changeDefaultList = (oldDefaultListName, newDefaultListName, lists) => {
+    for (let list of lists) {
+        if (list.name === oldDefaultListName) {
+            list.isDefault = false;
+        }
+        else if (list.name === newDefaultListName) {
+            list.isDefault = true;
+        }
+    }
+    storeItem('lists', lists);
+    return lists
 }

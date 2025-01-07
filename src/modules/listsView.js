@@ -1,6 +1,5 @@
 
-import { deleteList } from "./listClass";
-import { storeItem } from "./localStorage";
+import { changeDefaultList, deleteList } from "./listClass";
 import { openListModal } from "./newListModal";
 export { listsView };
 
@@ -49,21 +48,14 @@ const listsView = (lists) => {
     }
     contentDiv.appendChild(listsDiv);
 
-    const currentSelectedRadio = document.querySelector('input[name="default-check"]:checked');
+    const currentDefaultRadio = document.querySelector('input[name="default-check"]:checked');
     const defaultRadios = document.querySelectorAll('input[type="radio"]');
     defaultRadios.forEach((radioButton) => {
         radioButton.addEventListener('change', (e) => {
             const newDefaultListName = e.target.dataset.listName;
-            for (let list of lists) {
-                if (list.name === currentSelectedRadio.dataset.listName) {
-                    list.isDefault = false;
-                }
-                else if (list.name === newDefaultListName) {
-                    list.isDefault = true;
-                }
-            }
-            storeItem('lists', lists);
-            listsView(lists);
+            const oldDefaultListName = currentDefaultRadio.dataset.listName;
+            const newLists = changeDefaultList(oldDefaultListName, newDefaultListName, lists);
+            listsView(newLists);
         })
     })
     
