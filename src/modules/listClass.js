@@ -1,17 +1,15 @@
-import { Task } from "./taskClass";
-import { storeItem } from "./localStorage";
 import { isValidDate } from "./dateTime";
-export { List, initiateListsCollection, handleListChange, allTasksDone, deleteList, changeDefaultList };
+import { Task } from "./taskClass";
+export { List };
 
 
 class List {
-    constructor(name, description, duedate, isDefault, isDone) {
+    constructor(name, description, duedate, isDone) {
         this.name = name,
         this.description = description,
         this.tasks = [],
         this.duedate = duedate,
-        this.done = isDone ? isDone : false,
-        this.isDefault = isDefault ? isDefault : false;
+        this.done = isDone ? isDone : false
     }
 
     addTask(taskName, description, duedate, priority, notes, done) {
@@ -19,81 +17,40 @@ class List {
         this.tasks.push(newTask);
     }
 
-    deleteTask(task) {
-        this.tasks = this.tasks.filter(existingTask => existingTask !== task);
+    updateTask(formData) {
+        const taskName = formData.get('task-name');
+        for (let task of this.tasks) {
+            if (task.name === taskName) {
+                const submittedDueDate = formData.get('task-duedate');
+                const taskDuedate = new Date(submittedDueDate);
+                const taskDone = formData.get('task-done') === 'false' ? false : true;
+
+                task.name = taskName;
+                task.description = formData.get('task-description');
+                task.duedate = isValidDate(taskDuedate) ? taskDuedate : 'None';
+                task.priority = formData.get('task-priority');
+                task.notes = formData.get('task-notes');
+                task.done = taskDone;
+                return
+            }
+        }
+        alert('No such task');
+    }
+
+    deleteTask(taskName) {
+        this.tasks = this.tasks.filter(existingTask => existingTask.name !== taskName);
     }
 
     sortedByDate() {
         return this.tasks.toSorted((a, b) => a.getDistance() - b.getDistance());
     }
-}
 
-const initiateListsCollection = () => {
-    const lists = [];
-    if (!localStorage.getItem('lists')) {
-        const defaultList = new List('My list', '', 'None', true);
-        lists.push(defaultList);
-        storeItem('lists', lists);
-    } else {
-        const jsonLists = JSON.parse(localStorage.getItem('lists'));
-        for (let item of jsonLists) {
-            const listDuedate = item.duedate === 'None' ? 'None' : new Date(item.duedate);
-            const listDone = item.done === false || item.done === 'false' ? false : true;
-            const newInstance = new List(item.name, item.description, listDuedate, item.isDefault, listDone);
-            for (let task of item.tasks) {
-                const taskDuedate = task.duedate === 'None' ? 'None' : new Date(task.duedate);
-                const taskDone = task.done === 'true' || task.done === true ? true : false;
-                newInstance.addTask(task.name, task.description, taskDuedate, task.priority, task.notes, taskDone);
+    allTasksDone() {
+        for (let task of this.tasks) {
+            if (!task.done) {
+                return false;
             }
-            lists.push(newInstance);
         }
+        return true;
     }
-    return lists;
-}
-
-const handleListChange = (formData, list, lists) => {
-    const listName = formData.get('list-name');
-    const formDuedate = new Date(formData.get('list-duedate'));
-    const listDuedate = isValidDate(formDuedate) ? formDuedate : 'None';
-    const listDescription = formData.get('list-description');
-    if (list) {
-        list.name = listName;
-        list.duedate = listDuedate;
-        list.description = listDescription;
-    } else {
-        const newList = new List(listName, listDescription ? listDescription : '', listDuedate);
-        lists.push(newList);
-    }
-    storeItem('lists', lists);
-    return listName;
-}
-
-const allTasksDone = (list) => {
-    for (let task of list.tasks) {
-        if (!task.done) {
-            return false;
-        } else {
-            continue
-        }
-    }
-    return true;
-}
-
-const deleteList = (listName, lists) => {
-    const newLists = lists.filter(list => list.name !== listName);
-    storeItem('lists', newLists);
-    return newLists;
-}
-
-const changeDefaultList = (oldDefaultListName, newDefaultListName, lists) => {
-    for (let list of lists) {
-        if (list.name === oldDefaultListName) {
-            list.isDefault = false;
-        }
-        else if (list.name === newDefaultListName) {
-            list.isDefault = true;
-        }
-    }
-    storeItem('lists', lists);
-    return lists
 }

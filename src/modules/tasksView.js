@@ -3,6 +3,7 @@ import { storeItem } from "./localStorage";
 import { openTaskModal } from "./taskModal";
 import { isValidDate } from "./dateTime";
 import { allTasksDone } from "./listClass";
+import { toggleTask } from "./taskClass";
 export { tasksView };
 
 
@@ -75,6 +76,7 @@ const tasksView = (selectedListName, lists) => {
     }
 
     function clickHandlerTaskCheckbox(e) {
+        toggleTask(e, selectedList, lists);
         const checkedTask = selectedList.tasks.find(checkedTask => checkedTask.name === e.target.dataset.taskName);
         if (e.target.checked === true) {
             checkedTask.done = true;

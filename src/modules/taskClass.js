@@ -1,7 +1,8 @@
 import { isValidDate } from "./dateTime";
+import { allTasksDone } from "./listClass";
 import { storeItem } from "./localStorage";
 import { tasksView } from "./tasksView";
-export { Task, handleTaskSubmit };
+export { Task, handleTaskSubmit, toggleTask };
 
 class Task {
     constructor(listName, name, description, duedate, priority, notes, done) {
@@ -16,18 +17,6 @@ class Task {
 
     getDistance() {
         return this.duedate - new Date.now();
-    }
-
-    move(newListName, lists) {
-        for (let list of lists) {
-            if (list.name === this.list) {
-                list.deleteTask(this);
-            }
-            if (list.name === newListName) {
-                list.tasks.push(this);
-            }
-        }
-        this.list = newListName;
     }
 }
 
@@ -56,4 +45,18 @@ const handleTaskSubmit = (formData, task, lists) => {
     }
     storeItem('lists', lists);
     tasksView(listName, lists);
+}
+
+const toggleTask = (e, selectedList, lists) => {
+    const checkedTask = selectedList.tasks.find(checkedTask => checkedTask.name === e.target.dataset.taskName);
+    if (e.target.checked === true) {
+        checkedTask.done = true;
+    } else {
+        checkedTask.done = false;
+    }
+    if (allTasksDone(selectedList)) {
+        selectedList.done = true;
+    }
+    storeItem('lists', lists);
+    return lists;
 }
