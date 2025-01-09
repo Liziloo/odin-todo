@@ -1,6 +1,5 @@
 import { format } from 'date-fns';
 import { isValidDate } from './dateTime';
-import { handleTaskSubmit } from './taskClass';
 export { openTaskModal };
 
 // Set the number of priority options available
@@ -141,7 +140,7 @@ const openTaskModal = (task, listsCollection) => {
         e.preventDefault();
         const taskForm = document.querySelector('.task-form');
         const formData = new FormData(taskForm);
-        handleTaskSubmit(formData);
+        listsCollection.handleTaskSubmit(formData);
     })
 
     closeButton.addEventListener('click', handleCloseModal);

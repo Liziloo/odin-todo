@@ -1,6 +1,7 @@
 import { List } from "./listClass";
 import { isValidDate } from "./dateTime";
 import { storeItem } from "./localStorage";
+import { tasksView } from "./tasksView";
 export { ListsCollection };
 
 class ListsCollection {
@@ -77,23 +78,34 @@ class ListsCollection {
                 list.tasks.push(taskName);
             }
         }
-        this.list = newListName;
     }
 
-    addTask(formData) {
+    handleTaskSubmit(formData) {
+        const newOrUpdate = formData.get('new-or-update');
         const listName = formData.get('task-list-name');
+        if (newOrUpdate === 'new') {
+            this.addTask(formData, listName);
+        } else {
+            this.updateTask(formData, listName);
+        }
+        this.store();
+        tasksView(listName, this);
+    }
+
+    addTask(formData, listName) {
         for (let list of this.lists) {
             if (list.name === listName) {
                 list.addTask(formData);
+                return
             }
         }
     }
 
-    updateTask(formData) {
-        const listName = formData.get('task-list-name');
+    updateTask(formData, listName) {
         for (let list of this.lists) {
             if (list.name === listName) {
                 list.updateTask(formData);
+                return
             }
         }
     }

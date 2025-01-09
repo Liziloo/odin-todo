@@ -12,14 +12,21 @@ class List {
         this.done = isDone ? isDone : false
     }
 
-    addTask(name, description, duedate, priority, notes, done) {
+    addTask(formData) {
+        const taskName = formData.get('task-name');
         for (let task of this.tasks) {
-            if (name === task.name) {
+            if (taskName === task.name) {
                 alert('A task with that name already exists.')
                 return
             }
         }
-        const newTask = new Task(name, description, duedate, priority, notes, done);
+        const taskDescription = formData.get('task-description');
+        const formDuedate = new Date(formData.get('task-duedate'));
+        const taskDuedate = isValidDate(formDuedate) ? formDuedate : 'None';
+        const taskPriority = formData.get('task-priority');
+        const taskNotes = formData.get('task-notes');
+        const taskDone = formData.get('task-done') === 'true' ? true : false;
+        const newTask = new Task(taskName, taskDescription, taskDuedate, taskPriority, taskNotes, taskDone);
         this.tasks.push(newTask);
     }
 
