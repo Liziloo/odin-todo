@@ -2,23 +2,20 @@ import './styles/comeau-reset.css';
 import './styles/styles.css';
 import { tasksView } from './modules/tasksView';
 import { listsView } from './modules/listsView';
-import { initiateListsCollection } from './modules/listClass';
+import { ListsCollection } from './modules/listsCollectionClass';
 
 
 (function() {
     // Always begin on tasks page of default list
-    const lists = initiateListsCollection();
-    for (let list of lists) {
-        if (list.isDefault) {
-            tasksView(list.name, lists);
-            break
-        }
-    }
+    // Load existing collection or create new one with predefined default list
+    const listsCollection = new ListsCollection();
+    listsCollection.initiateListsCollection();
+    tasksView(listsCollection.default, listsCollection)
     
 
     const tasksButton = document.querySelector('#tasks-button');
-    tasksButton.addEventListener('click', () => {tasksView('all', lists)});
+    tasksButton.addEventListener('click', () => {tasksView('all', listsCollection)});
     const listsButton = document.querySelector('#projects-button');
-    listsButton.addEventListener('click', () => {listsView(lists)})
+    listsButton.addEventListener('click', () => {listsView(listsCollection)})
 }) ();
 

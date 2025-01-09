@@ -1,5 +1,6 @@
 import { List } from "./listClass";
 import { isValidDate } from "./dateTime";
+import { storeItem } from "./localStorage";
 export { ListsCollection };
 
 class ListsCollection {
@@ -10,17 +11,19 @@ class ListsCollection {
 
     initiateListsCollection() {
         const lists = [];
-        if (!localStorage.getItem('listsCollection')) {
-            const defaultList = new List(0, 'My list', '', 'None', true);
+        if (!localStorage.getItem('lists-collection')) {
+            const defaultList = new List('My list', '', 'None', true);
             lists.push(defaultList);
-            this.default = defaultList;
+            this.default = defaultList.name;
         } else {
             const jsonLists = JSON.parse(localStorage.getItem('lists-collection'));
-            for (let item of jsonLists) {
-                const listDuedate = item.duedate === 'None' ? 'None' : new Date(item.duedate);
-                const listDone = item.done === false || item.done === 'false' ? false : true;
-                const newInstance = new List(item.name, item.description, listDuedate, listDone);
-                for (let task of item.tasks) {
+            console.log(jsonLists);
+            this.default = jsonLists.default;
+            for (let list of jsonLists.lists) {
+                const listDuedate = list.duedate === 'None' ? 'None' : new Date(list.duedate);
+                const listDone = list.done === false || list.done === 'false' ? false : true;
+                const newInstance = new List(list.name, list.description, listDuedate, listDone);
+                for (let task of list.tasks) {
                     const taskDuedate = task.duedate === 'None' ? 'None' : new Date(task.duedate);
                     const taskDone = task.done === 'true' || task.done === true ? true : false;
                     newInstance.addTask(task.name, task.description, taskDuedate, task.priority, task.notes, taskDone);
@@ -93,5 +96,9 @@ class ListsCollection {
                 list.updateTask(formData);
             }
         }
+    }
+
+    store() {
+        storeItem('lists-collection', this);
     }
 }

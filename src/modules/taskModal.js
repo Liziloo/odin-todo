@@ -6,7 +6,7 @@ export { openTaskModal };
 // Set the number of priority options available
 const priorityNumber = 5;
 
-const openTaskModal = (task, lists) => {
+const openTaskModal = (task, listsCollection) => {
     const taskButton = document.querySelector('.new-task-button');
 
     const contentDiv = document.querySelector('#content');
@@ -32,6 +32,15 @@ const openTaskModal = (task, lists) => {
 
     const taskForm = document.createElement('form');
     taskForm.classList.add('task-form');
+
+    const newOrUpdateInput = document.createElement('input');
+    newOrUpdateInput.hidden = true;
+    newOrUpdateInput.name = 'new-or-update';
+    if (task) {
+        newOrUpdateInput.value = 'update';
+    } else {
+        newOrUpdateInput.value = 'new';
+    }
 
     const taskDoneInput = document.createElement('input');
     taskDoneInput.hidden = true;
@@ -59,7 +68,7 @@ const openTaskModal = (task, lists) => {
     const listsSelect = document.createElement('select');
     listsSelect.setAttribute('name', 'task-list-name');
     listsSelect.id = 'task-list';
-    for (let list of lists) {
+    for (let list of listsCollection.lists) {
         const listOption = document.createElement('option');
         listOption.value = list.name;
         listOption.textContent = list.name;
@@ -122,7 +131,7 @@ const openTaskModal = (task, lists) => {
     submitButton.classList.add('task-submit-button');
     submitButton.textContent = task? 'Save edits' : 'Add task';
 
-    taskForm.append(taskDoneInput, nameDiv, listsDiv, descriptionDiv, duedateDiv, priorityDiv, notesDiv, submitButton);
+    taskForm.append(taskDoneInput, newOrUpdateInput, nameDiv, listsDiv, descriptionDiv, duedateDiv, priorityDiv, notesDiv, submitButton);
 
     modalDiv.append(modalHeader, taskForm);
     modalBackgroundDiv.appendChild(modalDiv);
@@ -132,7 +141,7 @@ const openTaskModal = (task, lists) => {
         e.preventDefault();
         const taskForm = document.querySelector('.task-form');
         const formData = new FormData(taskForm);
-        handleTaskSubmit(formData, task ? task : null, lists);
+        handleTaskSubmit(formData);
     })
 
     closeButton.addEventListener('click', handleCloseModal);

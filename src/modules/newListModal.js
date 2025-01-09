@@ -1,6 +1,5 @@
 import { format } from "date-fns";
 import { tasksView } from "./tasksView";
-import { handleListChange } from "./listClass";
 import { isValidDate } from "./dateTime";
 export { openListModal };
 

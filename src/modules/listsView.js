@@ -1,5 +1,3 @@
-
-import { changeDefaultList, deleteList } from "./listClass";
 import { openListModal } from "./newListModal";
 export { listsView };
 

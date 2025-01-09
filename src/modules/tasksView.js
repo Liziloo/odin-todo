@@ -2,16 +2,14 @@ import { openListModal } from "./newListModal";
 import { storeItem } from "./localStorage";
 import { openTaskModal } from "./taskModal";
 import { isValidDate } from "./dateTime";
-import { allTasksDone } from "./listClass";
 import { toggleTask } from "./taskClass";
 export { tasksView };
 
 
-const tasksView = (selectedListName, lists) => {
+const tasksView = (selectedListName, listsCollection) => {
     const contentDiv = document.querySelector('#content');
     
-    // Check if user already has lists in local storage, if not, create default list
-    const selectedList = lists.find(list => list.name === selectedListName);
+    const selectedList = listsCollection.lists.find(list => list.name === selectedListName);
     
     contentDiv.textContent = '';
 
@@ -29,7 +27,7 @@ const tasksView = (selectedListName, lists) => {
     allOption.textContent = 'All tasks';
     allOption.value = 'all';
     listSelect.appendChild(allOption);
-    for (let list of lists) {
+    for (let list of listsCollection.lists) {
         const listOption = document.createElement('option');
         listOption.setAttribute('value', list.name);
         listOption.textContent = list.name;
@@ -55,7 +53,7 @@ const tasksView = (selectedListName, lists) => {
     const taskUl = document.createElement('ul');
     taskUl.classList.add('task-ul');
     if (selectedListName === 'all') {
-        for (let list of lists) {
+        for (let list of listsCollection.lists) {
             const tasks = []
             for (let task of list.tasks) {
                 tasks.push(task);
@@ -72,33 +70,33 @@ const tasksView = (selectedListName, lists) => {
 
     function clickHandlerNewTask(e) {
         e.preventDefault();
-        openTaskModal(null, lists);
+        openTaskModal(null, listsCollection);
     }
 
     function clickHandlerTaskCheckbox(e) {
-        toggleTask(e, selectedList, lists);
+        toggleTask(e, selectedList, listsCollection.lists);
         const checkedTask = selectedList.tasks.find(checkedTask => checkedTask.name === e.target.dataset.taskName);
         if (e.target.checked === true) {
             checkedTask.done = true;
         } else {
             checkedTask.done = false;
         }
-        if (allTasksDone(selectedList)) {
+        if (selectedList.allTasksDone) {
             selectedList.done = true;
         }
-        storeItem('lists', lists);
-        tasksView(selectedListName, lists);
+        storeItem('lists-collection', listsCollection);
+        tasksView(selectedListName, listsCollection);
     }
 
     function clickHandlerNewList(e) {
         e.preventDefault();
-        openListModal(null, lists);
+        openListModal(null, listsCollection);
     }
 
     function changeHandlerListSelect(e) {
         const newSelectedListName = e.target.value;
         taskUl.textContent = '';
-        tasksView(newSelectedListName, lists);
+        tasksView(newSelectedListName, listsCollection);
     }
 
     function populateTaskList(tasks) {
@@ -124,10 +122,10 @@ const tasksView = (selectedListName, lists) => {
             taskDeleteButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 const targetListName = e.target.dataset.listName;
-                const targetList = lists.find((list) => list.name === targetListName);
+                const targetList = listsCollection.lists.find((list) => list.name === targetListName);
                 targetList.deleteTask(task);
-                storeItem('lists', lists);
-                tasksView(selectedListName, lists);
+                storeItem('lists-collection', listsCollection);
+                tasksView(selectedListName, listsCollection);
             });
             taskLi.appendChild(taskDeleteButton);
             taskUl.appendChild(taskLi);
@@ -139,7 +137,7 @@ const tasksView = (selectedListName, lists) => {
             if (!selectedTaskName || e.target.tagName !== 'LABEL') {return};
             const selectedTaskArray = tasks.filter((task) => task.name === selectedTaskName);
             const selectedTask = selectedTaskArray[0];
-            openTaskModal(selectedTask, lists);
+            openTaskModal(selectedTask, listsCollection);
             const submitButton = document.querySelector('.task-submit-button');
             submitButton.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -156,14 +154,14 @@ const tasksView = (selectedListName, lists) => {
                 const taskDone = formData.get('task-done');
                 selectedList.editTask(selectedTaskName, editedTaskName, taskDescription, taskDuedate, taskPriority, taskNotes, taskDone);
                 if (editedTaskListName !== selectedTask.list) {
-                    selectedTask.move(editedTaskListName, lists);
+                    selectedTask.move(editedTaskListName, listsCollection);
                 }
-                storeItem('lists', lists);
+                storeItem('lists-collection', listsCollection);
                 const modal = document.querySelector('.modal-background');
                 modal.remove();
-                tasksView(selectedListName, lists);
+                tasksView(selectedListName, listsCollection);
             })
         })
     }
-    console.log('tasks-view lists', lists);
+    console.log('tasks-view listsCollection', listsCollection);
 }

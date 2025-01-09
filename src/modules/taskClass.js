@@ -54,7 +54,7 @@ const toggleTask = (e, selectedList, lists) => {
     } else {
         checkedTask.done = false;
     }
-    if (allTasksDone(selectedList)) {
+    if (selectedList.done) {
         selectedList.done = true;
     }
     storeItem('lists', lists);
