@@ -132,6 +132,21 @@ class ListsCollection {
         }
     }
 
+    toggleTask(e, selectedList) {
+        const checkedTask = selectedList.tasks.find(checkedTask => checkedTask.name === e.target.dataset.taskName);
+        if (e.target.checked === true) {
+            checkedTask.done = true;
+        } else {
+            checkedTask.done = false;
+        }
+        if (selectedList.allTasksDone) {
+            selectedList.done = true;
+        }
+        this.store();
+        tasksView(selectedList.name, this);
+        return
+    }
+
     store() {
         storeItem('lists-collection', this);
     }

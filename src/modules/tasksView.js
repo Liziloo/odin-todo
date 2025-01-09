@@ -66,18 +66,7 @@ const tasksView = (selectedListName, listsCollection) => {
     }
 
     function clickHandlerTaskCheckbox(e) {
-        toggleTask(e, selectedList, listsCollection.lists);
-        const checkedTask = selectedList.tasks.find(checkedTask => checkedTask.name === e.target.dataset.taskName);
-        if (e.target.checked === true) {
-            checkedTask.done = true;
-        } else {
-            checkedTask.done = false;
-        }
-        if (selectedList.allTasksDone) {
-            selectedList.done = true;
-        }
-        storeItem('lists-collection', listsCollection);
-        tasksView(selectedListName, listsCollection);
+        listsCollection.toggleTask(e, selectedList);
     }
 
     function changeHandlerListSelect(e) {
