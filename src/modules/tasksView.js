@@ -1,4 +1,3 @@
-import { openListModal } from "./newListModal";
 import { storeItem } from "./localStorage";
 import { openTaskModal } from "./taskModal";
 import { isValidDate } from "./dateTime";
@@ -12,13 +11,6 @@ const tasksView = (selectedListName, listsCollection) => {
     const selectedList = listsCollection.lists.find(list => list.name === selectedListName);
     
     contentDiv.textContent = '';
-
-    const newListDiv = document.createElement('div');
-    const newListButton = document.createElement('button');
-    newListButton.classList.add('new-list-button');
-    newListButton.textContent = 'New list';
-    newListDiv.appendChild(newListButton);
-    newListButton.addEventListener('click', clickHandlerNewList);
 
     const listSelectDiv = document.createElement('div');
     const listSelect = document.createElement('select');
@@ -66,7 +58,7 @@ const tasksView = (selectedListName, listsCollection) => {
    
     taskDiv.appendChild(taskUl);
     listDiv.appendChild(taskDiv);
-    contentDiv.append(newListDiv, listSelectDiv, listDiv, taskDiv);
+    contentDiv.append(listSelectDiv, listDiv, taskDiv);
 
     function clickHandlerNewTask(e) {
         e.preventDefault();
@@ -86,11 +78,6 @@ const tasksView = (selectedListName, listsCollection) => {
         }
         storeItem('lists-collection', listsCollection);
         tasksView(selectedListName, listsCollection);
-    }
-
-    function clickHandlerNewList(e) {
-        e.preventDefault();
-        openListModal(null, listsCollection);
     }
 
     function changeHandlerListSelect(e) {

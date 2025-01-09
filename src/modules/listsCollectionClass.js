@@ -1,7 +1,9 @@
 import { List } from "./listClass";
+import { Task } from "./taskClass";
 import { isValidDate } from "./dateTime";
 import { storeItem } from "./localStorage";
 import { tasksView } from "./tasksView";
+import { listsView } from "./listsView";
 export { ListsCollection };
 
 class ListsCollection {
@@ -18,7 +20,6 @@ class ListsCollection {
             this.default = defaultList.name;
         } else {
             const jsonLists = JSON.parse(localStorage.getItem('lists-collection'));
-            console.log(jsonLists);
             this.default = jsonLists.default;
             for (let list of jsonLists.lists) {
                 const listDuedate = list.duedate === 'None' ? 'None' : new Date(list.duedate);
@@ -27,7 +28,8 @@ class ListsCollection {
                 for (let task of list.tasks) {
                     const taskDuedate = task.duedate === 'None' ? 'None' : new Date(task.duedate);
                     const taskDone = task.done === 'true' || task.done === true ? true : false;
-                    newInstance.addTask(task.name, task.description, taskDuedate, task.priority, task.notes, taskDone);
+                    const newTask = new Task(task.name, task.description, taskDuedate, task.priority, task.notes, taskDone);
+                    newInstance.tasks.push(newTask)
                 }
                 lists.push(newInstance);
             }
@@ -35,8 +37,25 @@ class ListsCollection {
         return lists
     }
 
-    addList(formData) {
-        const listName = formData.get('list-name');
+    handleDefaultChange(listName) {
+        this.default = listName;
+        this.store();
+        listsView(this);
+    }
+
+    handleListSubmit(formData) {
+        const newOrUpdate = formData.get('new-or-update');
+        const listName = formData.get('list-name')
+        if (newOrUpdate === 'new') {
+            this.addList(formData, listName);
+        } else {
+            this.updateList(formData, listName);
+        }
+        this.store();
+        listsView(this);
+    }
+
+    addList(formData, listName) {
         for (let list of this.lists) {
             if (listName === list.name) {
                 alert('List with that name already exists');
@@ -48,10 +67,11 @@ class ListsCollection {
         const listDescription = formData.get('list-description');
         const newList = new List(listName, listDescription ? listDescription : '', listDuedate);
         this.lists.push(newList);
+        this.store();
+        listsView(this);
     }
 
-    changeList(formData) {
-        const listName = formData.get('list-name');
+    updateList(formData, listName) {
         const formDuedate = new Date(formData.get('list-duedate'));
         const listDuedate = isValidDate(formDuedate) ? formDuedate : 'None';
         const listDescription = formData.get('list-description');
@@ -67,6 +87,8 @@ class ListsCollection {
 
     deleteList(listName) {
         this.lists = this.lists.filter(list => list.name !== listName);
+        this.store();
+        listsView(this);
     }
 
     moveTask(taskName, newListName, oldListName) {

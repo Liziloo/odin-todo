@@ -2,12 +2,20 @@ import { openListModal } from "./newListModal";
 export { listsView };
 
 
-const listsView = (lists) => {
+const listsView = (listsCollection) => {
+    console.log('listsview listscollect', listsCollection);
     const contentDiv = document.querySelector('#content');
     contentDiv.textContent = '';
 
+    const newListDiv = document.createElement('div');
+    const newListButton = document.createElement('button');
+    newListButton.classList.add('new-list-button');
+    newListButton.textContent = 'New list';
+    newListDiv.appendChild(newListButton);
+    newListButton.addEventListener('click', clickHandlerNewList);
+
     const listsDiv = document.createElement('div');
-    for (let list of lists) {
+    for (let list of listsCollection.lists) {
         const listLi = document.createElement('div');
         listLi.classList.add('list-div');
         const listName = document.createElement('div');
@@ -16,7 +24,7 @@ const listsView = (lists) => {
         defaultRadio.setAttribute('type', 'radio');
         defaultRadio.setAttribute('name', 'default-check');
         defaultRadio.dataset.listName = list.name;
-        if (list.isDefault === true) {
+        if (list.name === listsCollection.default) {
             defaultRadio.checked = true;
         }
         const defaultLabel = document.createElement('label');
@@ -29,7 +37,7 @@ const listsView = (lists) => {
         editButton.textContent = 'Edit';
         editButton.addEventListener('click', (e) => {
             e.preventDefault();
-            openListModal(list, lists);
+            openListModal(list, listsCollection);
         })
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
@@ -37,24 +45,25 @@ const listsView = (lists) => {
         deleteButton.addEventListener('click', (e) => {
             e.preventDefault();        
             const deleteListName = e.target.dataset.listName;
-            const newLists = deleteList(deleteListName, lists);
-            listsView(newLists);
+            listsCollection.deleteList(deleteListName);
         })
         buttonDiv.append(editButton, deleteButton);
         listLi.append(listName, defaultRadio, defaultLabel, listDuedate, buttonDiv);
         listsDiv.appendChild(listLi);
     }
-    contentDiv.appendChild(listsDiv);
+    contentDiv.append(newListDiv, listsDiv);
 
-    const currentDefaultRadio = document.querySelector('input[name="default-check"]:checked');
     const defaultRadios = document.querySelectorAll('input[type="radio"]');
     defaultRadios.forEach((radioButton) => {
         radioButton.addEventListener('change', (e) => {
             const newDefaultListName = e.target.dataset.listName;
-            const oldDefaultListName = currentDefaultRadio.dataset.listName;
-            const newLists = changeDefaultList(oldDefaultListName, newDefaultListName, lists);
-            listsView(newLists);
+            listsCollection.handleDefaultChange(newDefaultListName);
         })
     })
+
+    function clickHandlerNewList(e) {
+        e.preventDefault();
+        openListModal(null, listsCollection);
+    }
     
 }

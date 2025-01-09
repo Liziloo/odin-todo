@@ -1,10 +1,9 @@
 import { format } from "date-fns";
-import { tasksView } from "./tasksView";
 import { isValidDate } from "./dateTime";
 export { openListModal };
 
 
-const openListModal = (list, lists) => {
+const openListModal = (list, listsCollection) => {
     const contentDiv = document.querySelector('#content');
     const modalBackgroundDiv = document.createElement('div');
     modalBackgroundDiv.classList.add('modal-background');
@@ -23,6 +22,15 @@ const openListModal = (list, lists) => {
 
     const listForm = document.createElement('form');
     listForm.classList.add('list-form');
+
+    const newOrUpdate = document.createElement('input');
+    newOrUpdate.name = 'new-or-update';
+    newOrUpdate.hidden = true;
+    if (!list) {
+        newOrUpdate.value = 'new';
+    } else {
+        newOrUpdate.value = 'update';
+    }
 
     const nameDiv = document.createElement('div');
     nameDiv.classList.add('name-div');
@@ -57,11 +65,18 @@ const openListModal = (list, lists) => {
     submitButton.classList.add('list-submit-button');
     submitButton.textContent = 'Add list';
 
-    listForm.append(nameDiv, duedateDiv, descriptionDiv, submitButton);
+    listForm.append(newOrUpdate, nameDiv, duedateDiv, descriptionDiv, submitButton);
 
     modalDiv.append(modalHeader, listForm);
     modalBackgroundDiv.appendChild(modalDiv);
     contentDiv.appendChild(modalBackgroundDiv);
+    
+    submitButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const listForm = document.querySelector('.list-form');
+        const formData = new FormData(listForm);
+        listsCollection.handleListSubmit(formData);
+    })
 
     closeButton.addEventListener('click', handleCloseModal);
 
@@ -69,13 +84,5 @@ const openListModal = (list, lists) => {
         const listModal = document.querySelector('.modal-background');
         listModal.remove();
     }
-    
-    submitButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        const listForm = document.querySelector('.list-form');
-        const formData = new FormData(listForm);
-        const newListName = handleListChange(formData, list ? list : null, lists);
-        tasksView(newListName, lists);
-    })
 
 }
