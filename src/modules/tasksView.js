@@ -1,7 +1,6 @@
 import { storeItem } from "./localStorage";
 import { openTaskModal } from "./taskModal";
 import { isValidDate } from "./dateTime";
-import { toggleTask } from "./taskClass";
 export { tasksView };
 
 
@@ -50,10 +49,10 @@ const tasksView = (selectedListName, listsCollection) => {
             for (let task of list.tasks) {
                 tasks.push(task);
             }
-            populateTaskList(tasks);
+            populateTaskList(list.name, tasks);
         }
     } else {
-        populateTaskList(selectedList.tasks);
+        populateTaskList(selectedListName, selectedList.tasks);
     }
    
     taskDiv.appendChild(taskUl);
@@ -75,14 +74,13 @@ const tasksView = (selectedListName, listsCollection) => {
         tasksView(newSelectedListName, listsCollection);
     }
 
-    function populateTaskList(tasks) {
+    function populateTaskList(listName, tasks) {
         for (let task of tasks) {
             const taskLi = document.createElement('li');
             const taskCheckbox = document.createElement('input');
             taskCheckbox.setAttribute('type', 'checkbox');
             taskCheckbox.id = task.name;
             taskCheckbox.dataset.taskName = task.name;
-            console.log(task);
             if (task.done) {
                 taskCheckbox.checked = true;
             }
@@ -94,14 +92,9 @@ const tasksView = (selectedListName, listsCollection) => {
             taskLi.append(taskCheckbox, checkboxLabel);
             const taskDeleteButton = document.createElement('button');
             taskDeleteButton.textContent = 'x';
-            taskDeleteButton.dataset.listName = task.list;
             taskDeleteButton.addEventListener('click', (e) => {
                 e.preventDefault();
-                const targetListName = e.target.dataset.listName;
-                const targetList = listsCollection.lists.find((list) => list.name === targetListName);
-                targetList.deleteTask(task);
-                storeItem('lists-collection', listsCollection);
-                tasksView(selectedListName, listsCollection);
+                listsCollection.deleteTask(listName, task);
             });
             taskLi.appendChild(taskDeleteButton);
             taskUl.appendChild(taskLi);

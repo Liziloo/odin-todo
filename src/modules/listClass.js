@@ -48,8 +48,8 @@ class List {
         alert('No such task');
     }
 
-    deleteTask(taskName) {
-        this.tasks = this.tasks.filter(existingTask => existingTask.name !== taskName);
+    deleteTask(task) {
+        this.tasks = this.tasks.filter(existingTask => existingTask !== task);
     }
 
     sortedByDate() {

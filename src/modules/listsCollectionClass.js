@@ -123,6 +123,15 @@ class ListsCollection {
         }
     }
 
+    deleteTask(listName, task) {
+        console.log(listName);
+        const targetList = this.lists.find((list) => list.name === listName);
+        console.log(targetList);
+        targetList.deleteTask(task);
+        this.store();
+        tasksView(targetList.name, this);
+    }
+
     updateTask(formData, listName) {
         for (let list of this.lists) {
             if (list.name === listName) {
