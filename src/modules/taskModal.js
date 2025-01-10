@@ -9,8 +9,6 @@ const openTaskModal = (e, listsCollection) => {
     const chosenList = listsCollection.lists.find((list) => list.name === e.target.dataset.listName);
     const chosenTask = chosenList.tasks.find((task) => task.name === e.target.dataset.taskName);
 
-    const taskButton = document.querySelector('.new-task-button');
-
     const contentDiv = document.querySelector('#content');
     const modalBackgroundDiv = document.createElement('div');
     modalBackgroundDiv.classList.add('modal-background');

@@ -145,7 +145,6 @@ class ListsCollection {
         }
         this.store();
         tasksView(fromList.name, this);
-        return
     }
 
     store() {
