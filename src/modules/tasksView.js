@@ -63,7 +63,7 @@ const tasksView = (selectedListName, listsCollection) => {
     }
 
     function clickHandlerTaskCheckbox(e) {
-        listsCollection.toggleTask(e, selectedList);
+        listsCollection.toggleTask(e);
     }
 
     function changeHandlerListSelect(e) {
@@ -79,6 +79,7 @@ const tasksView = (selectedListName, listsCollection) => {
             taskCheckbox.setAttribute('type', 'checkbox');
             taskCheckbox.id = task.name;
             taskCheckbox.dataset.taskName = task.name;
+            taskCheckbox.dataset.listName = listName;
             if (task.done) {
                 taskCheckbox.checked = true;
             }

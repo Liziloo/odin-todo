@@ -6,8 +6,8 @@ export { openTaskModal };
 const priorityNumber = 5;
 
 const openTaskModal = (e, listsCollection) => {
-    const list = listsCollection.lists.find((list) => list.name === e.target.dataset.listName);
-    const task = list.tasks.find((task) => task.name === e.target.dataset.taskName);
+    const chosenList = listsCollection.lists.find((list) => list.name === e.target.dataset.listName);
+    const chosenTask = chosenList.tasks.find((task) => task.name === e.target.dataset.taskName);
 
     const taskButton = document.querySelector('.new-task-button');
 
@@ -21,10 +21,10 @@ const openTaskModal = (e, listsCollection) => {
     modalHeader.classList.add('modal-header');
     const modalTitle = document.createElement('h3');
     modalTitle.classList.add('modal-title');
-    if (!task) {
+    if (!chosenTask) {
         modalTitle.textContent = 'Add new task';
     } else {
-        modalTitle.textContent = task.name;
+        modalTitle.textContent = chosenTask.name;
     }
     
     const closeButton = document.createElement('button');
@@ -38,7 +38,7 @@ const openTaskModal = (e, listsCollection) => {
     const newOrUpdateInput = document.createElement('input');
     newOrUpdateInput.hidden = true;
     newOrUpdateInput.name = 'new-or-update';
-    if (task) {
+    if (chosenTask) {
         newOrUpdateInput.value = 'update';
     } else {
         newOrUpdateInput.value = 'new';
@@ -47,13 +47,13 @@ const openTaskModal = (e, listsCollection) => {
     const originalListInput = document.createElement('input');
     originalListInput.hidden = true;
     originalListInput.name = 'original-list';
-    originalListInput.value = list.name;
+    originalListInput.value = chosenList.name;
 
     const taskDoneInput = document.createElement('input');
     taskDoneInput.hidden = true;
     taskDoneInput.name = 'task-done';
-    if (task) {
-        taskDoneInput.value = task.done;
+    if (chosenTask) {
+        taskDoneInput.value = chosenTask.done;
     } else {
         taskDoneInput.value = false;
     }
@@ -65,7 +65,7 @@ const openTaskModal = (e, listsCollection) => {
     const nameInput = document.createElement('input');
     nameInput.required = true;
     nameInput.setAttribute('name', 'task-name');
-    nameInput.value = task ? task.name : null;
+    nameInput.value = chosenTask ? chosenTask.name : null;
     nameDiv.append(nameLabel, nameInput);
 
     const listsDiv = document.createElement('div');
@@ -79,7 +79,7 @@ const openTaskModal = (e, listsCollection) => {
         const listOption = document.createElement('option');
         listOption.value = list.name;
         listOption.textContent = list.name;
-        if (list.name === taskButton.getAttribute('data-list-name')) {
+        if (list.name === chosenList.name) {
             listOption.selected = true;
         }
         listsSelect.appendChild(listOption);
@@ -93,7 +93,7 @@ const openTaskModal = (e, listsCollection) => {
     descriptionLabel.textContent = 'Description:';
     const descriptionInput = document.createElement('input');
     descriptionInput.setAttribute('name', 'task-description');
-    descriptionInput.value = task ? task.description : null;
+    descriptionInput.value = chosenTask ? chosenTask.description : null;
     descriptionDiv.append(descriptionLabel, descriptionInput);
 
     const duedateDiv = document.createElement('div');
@@ -103,7 +103,7 @@ const openTaskModal = (e, listsCollection) => {
     const duedateInput = document.createElement('input');
     duedateInput.setAttribute('name', 'task-duedate');
     duedateInput.setAttribute('type', 'datetime-local');
-    duedateInput.value = task && isValidDate(task.duedate) ? format(task.duedate, "yyyy-MM-dd'T'HH:mm") : null;
+    duedateInput.value = chosenTask && isValidDate(chosenTask.duedate) ? format(chosenTask.duedate, "yyyy-MM-dd'T'HH:mm") : null;
     duedateDiv.append(duedateLabel, duedateInput);
 
     const priorityDiv = document.createElement('div');
@@ -118,8 +118,8 @@ const openTaskModal = (e, listsCollection) => {
         const priorityOption = document.createElement('option');
         priorityOption.value = i;
         priorityOption.textContent = i;
-        if (task) {
-            priorityOption.selected = i === task.priority ? true : false;
+        if (chosenTask) {
+            priorityOption.selected = i === chosenTask.priority ? true : false;
         }
         prioritySelect.appendChild(priorityOption);
     }
@@ -131,12 +131,12 @@ const openTaskModal = (e, listsCollection) => {
     notesLabel.textContent = 'Notes:';
     const notesInput = document.createElement('textarea');
     notesInput.setAttribute('name', 'task-notes');
-    notesInput.value = task ? task.notes : null;
+    notesInput.value = chosenTask ? chosenTask.notes : null;
     notesDiv.append(notesLabel, notesInput);
 
     const submitButton = document.createElement('button');
     submitButton.classList.add('task-submit-button');
-    submitButton.textContent = task? 'Save edits' : 'Add task';
+    submitButton.textContent = chosenTask? 'Save edits' : 'Add task';
     submitButton.addEventListener('click', (e) => {
         e.preventDefault();
         const taskForm = document.querySelector('.task-form');

@@ -123,6 +123,8 @@ class ListsCollection {
     deleteTask(listName, task) {
         const targetList = this.lists.find((list) => list.name === listName);
         targetList.deleteTask(task);
+        this.store();
+        tasksView(listName, this);
     }
 
     updateTask(formData, listName) {
@@ -130,18 +132,19 @@ class ListsCollection {
         list.updateTask(formData);
     }
 
-    toggleTask(e, selectedList) {
-        const checkedTask = selectedList.tasks.find(checkedTask => checkedTask.name === e.target.dataset.taskName);
+    toggleTask(e) {
+        const fromList = this.lists.find((list) => list.name === e.target.dataset.listName);
+        const checkedTask = fromList.tasks.find(task => task.name === e.target.dataset.taskName);
         if (e.target.checked === true) {
             checkedTask.done = true;
         } else {
             checkedTask.done = false;
         }
-        if (selectedList.allTasksDone) {
-            selectedList.done = true;
+        if (fromList.allTasksDone) {
+            fromList.done = true;
         }
         this.store();
-        tasksView(selectedList.name, this);
+        tasksView(fromList.name, this);
         return
     }
 

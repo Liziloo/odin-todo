@@ -1,4 +1,4 @@
-import { openListModal } from "./newListModal";
+import { openListModal } from "./listModal";
 export { listsView };
 
 
