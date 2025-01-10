@@ -5,7 +5,10 @@ export { openTaskModal };
 // Set the number of priority options available
 const priorityNumber = 5;
 
-const openTaskModal = (task, listsCollection) => {
+const openTaskModal = (e, listsCollection) => {
+    const list = listsCollection.lists.find((list) => list.name === e.target.dataset.listName);
+    const task = list.tasks.find((task) => task.name === e.target.dataset.taskName);
+
     const taskButton = document.querySelector('.new-task-button');
 
     const contentDiv = document.querySelector('#content');
@@ -40,6 +43,11 @@ const openTaskModal = (task, listsCollection) => {
     } else {
         newOrUpdateInput.value = 'new';
     }
+
+    const originalListInput = document.createElement('input');
+    originalListInput.hidden = true;
+    originalListInput.name = 'original-list';
+    originalListInput.value = list.name;
 
     const taskDoneInput = document.createElement('input');
     taskDoneInput.hidden = true;
@@ -129,13 +137,6 @@ const openTaskModal = (task, listsCollection) => {
     const submitButton = document.createElement('button');
     submitButton.classList.add('task-submit-button');
     submitButton.textContent = task? 'Save edits' : 'Add task';
-
-    taskForm.append(taskDoneInput, newOrUpdateInput, nameDiv, listsDiv, descriptionDiv, duedateDiv, priorityDiv, notesDiv, submitButton);
-
-    modalDiv.append(modalHeader, taskForm);
-    modalBackgroundDiv.appendChild(modalDiv);
-    contentDiv.appendChild(modalBackgroundDiv);
-
     submitButton.addEventListener('click', (e) => {
         e.preventDefault();
         const taskForm = document.querySelector('.task-form');
@@ -143,12 +144,15 @@ const openTaskModal = (task, listsCollection) => {
         listsCollection.handleTaskSubmit(formData);
     })
 
+    taskForm.append(taskDoneInput, originalListInput, newOrUpdateInput, nameDiv, listsDiv, descriptionDiv, duedateDiv, priorityDiv, notesDiv, submitButton);
+
+    modalDiv.append(modalHeader, taskForm);
+    modalBackgroundDiv.appendChild(modalDiv);
+    contentDiv.appendChild(modalBackgroundDiv);
+
     closeButton.addEventListener('click', handleCloseModal);
 
     function handleCloseModal() {
         modalBackgroundDiv.remove();
     }
-    
-    
-
 }

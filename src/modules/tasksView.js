@@ -1,6 +1,4 @@
-import { storeItem } from "./localStorage";
 import { openTaskModal } from "./taskModal";
-import { isValidDate } from "./dateTime";
 export { tasksView };
 
 
@@ -61,7 +59,7 @@ const tasksView = (selectedListName, listsCollection) => {
 
     function clickHandlerNewTask(e) {
         e.preventDefault();
-        openTaskModal(null, listsCollection);
+        openTaskModal(e, listsCollection);
     }
 
     function clickHandlerTaskCheckbox(e) {
@@ -88,6 +86,7 @@ const tasksView = (selectedListName, listsCollection) => {
             checkboxLabel.textContent = `${task.name} Due: ${task.duedate.toLocaleString()}`;
             checkboxLabel.setAttribute('for', task.name);
             checkboxLabel.dataset.taskName = task.name;
+            checkboxLabel.dataset.listName = listName;
             checkboxLabel.addEventListener('click', (e) => {e.preventDefault();})
             taskLi.append(taskCheckbox, checkboxLabel);
             const taskDeleteButton = document.createElement('button');
@@ -104,32 +103,7 @@ const tasksView = (selectedListName, listsCollection) => {
         taskUl.addEventListener('click', (e) => {
             const selectedTaskName = e.target.dataset.taskName;
             if (!selectedTaskName || e.target.tagName !== 'LABEL') {return};
-            const selectedTaskArray = tasks.filter((task) => task.name === selectedTaskName);
-            const selectedTask = selectedTaskArray[0];
-            openTaskModal(selectedTask, listsCollection);
-            const submitButton = document.querySelector('.task-submit-button');
-            submitButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                const taskForm = document.querySelector('.task-form');
-                const formData = new FormData(taskForm);
-                const editedTaskName = formData.get('task-name');
-                const editedTaskListName = formData.get('task-list-name');
-                
-                const taskDescription = formData.get('task-description');
-                const formDueDate = new Date(formData.get('task-duedate'));
-                const taskDuedate = isValidDate(formDueDate) ? formDueDate : 'None';
-                const taskPriority = formData.get('task-priority');
-                const taskNotes = formData.get('task-notes');
-                const taskDone = formData.get('task-done');
-                selectedList.editTask(selectedTaskName, editedTaskName, taskDescription, taskDuedate, taskPriority, taskNotes, taskDone);
-                if (editedTaskListName !== selectedTask.list) {
-                    selectedTask.move(editedTaskListName, listsCollection);
-                }
-                storeItem('lists-collection', listsCollection);
-                const modal = document.querySelector('.modal-background');
-                modal.remove();
-                tasksView(selectedListName, listsCollection);
-            })
+            openTaskModal(e, listsCollection);
         })
     }
     console.log('tasks-view listsCollection', listsCollection);

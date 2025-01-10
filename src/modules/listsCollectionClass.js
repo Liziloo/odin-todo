@@ -91,54 +91,43 @@ class ListsCollection {
         listsView(this);
     }
 
-    moveTask(taskName, newListName, oldListName) {
-        for (let list of this.lists) {
-            if (list.name === oldListName) {
-                list.deleteTask(taskName);
-            }
-            if (list.name === newListName) {
-                list.tasks.push(taskName);
-            }
-        }
+    moveTask(formData, newListName, oldListName) {
+        const newList = this.lists.find((list) => list.name === newListName);
+        const oldList = this.lists.find((list) => list.name === oldListName);
+        const task = oldList.tasks.find((task) => task.name === formData.get('task-name'));
+        oldList.deleteTask(task);
+        newList.addTask(formData);
     }
 
     handleTaskSubmit(formData) {
         const newOrUpdate = formData.get('new-or-update');
-        const listName = formData.get('task-list-name');
+        const oldListName = formData.get('original-list');
+        const newListName = formData.get('task-list-name');
         if (newOrUpdate === 'new') {
-            this.addTask(formData, listName);
+            this.addTask(formData, newListName);
+        } else if (oldListName === newListName) {
+            this.updateTask(formData, oldListName);
         } else {
-            this.updateTask(formData, listName);
+            this.moveTask(formData, newListName, oldListName);
         }
         this.store();
-        tasksView(listName, this);
+        tasksView(newListName, this);
     }
 
     addTask(formData, listName) {
-        for (let list of this.lists) {
-            if (list.name === listName) {
-                list.addTask(formData);
-                return
-            }
-        }
+        console.log('triggered');
+        const list = this.lists.find((list) => list.name === listName);
+        list.addTask(formData);
     }
 
     deleteTask(listName, task) {
-        console.log(listName);
         const targetList = this.lists.find((list) => list.name === listName);
-        console.log(targetList);
         targetList.deleteTask(task);
-        this.store();
-        tasksView(targetList.name, this);
     }
 
     updateTask(formData, listName) {
-        for (let list of this.lists) {
-            if (list.name === listName) {
-                list.updateTask(formData);
-                return
-            }
-        }
+        const list = this.lists.find((list) => list.name === listName);
+        list.updateTask(formData);
     }
 
     toggleTask(e, selectedList) {
