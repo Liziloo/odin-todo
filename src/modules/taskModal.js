@@ -45,11 +45,13 @@ const openTaskModal = (e, listsCollection) => {
     const originalTaskInput = document.createElement('input');
     originalTaskInput.hidden = true;
     originalTaskInput.name = 'original-task-name';
-    originalTaskInput.value = chosenTask.name;
+    if (chosenTask) {
+        originalTaskInput.value = chosenTask.name;
+    }
 
     const originalListInput = document.createElement('input');
     originalListInput.hidden = true;
-    originalListInput.name = 'original-list';
+    originalListInput.name = 'original-list-name';
     originalListInput.value = chosenList.name;
 
     const taskDoneInput = document.createElement('input');

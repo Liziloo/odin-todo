@@ -32,6 +32,13 @@ const openListModal = (list, listsCollection) => {
         newOrUpdate.value = 'update';
     }
 
+    const originalListNameInput = document.createElement('input')
+    originalListNameInput.hidden = true;
+    originalListNameInput.name = 'original-list-name';
+    if (list) {
+        originalListNameInput.value = list.name;
+    }
+
     const nameDiv = document.createElement('div');
     nameDiv.classList.add('name-div');
     const nameLabel = document.createElement('label');
@@ -63,9 +70,13 @@ const openListModal = (list, listsCollection) => {
 
     const submitButton = document.createElement('button');
     submitButton.classList.add('list-submit-button');
-    submitButton.textContent = 'Add list';
+    if (list) {
+        submitButton.textContent = 'Edit list';
+    } else {
+        submitButton.textContent = 'Add list';
+    }
 
-    listForm.append(newOrUpdate, nameDiv, duedateDiv, descriptionDiv, submitButton);
+    listForm.append(newOrUpdate, originalListNameInput, nameDiv, duedateDiv, descriptionDiv, submitButton);
 
     modalDiv.append(modalHeader, listForm);
     modalBackgroundDiv.appendChild(modalDiv);

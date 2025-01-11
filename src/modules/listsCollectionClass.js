@@ -45,17 +45,17 @@ class ListsCollection {
 
     handleListSubmit(formData) {
         const newOrUpdate = formData.get('new-or-update');
-        const listName = formData.get('list-name')
         if (newOrUpdate === 'new') {
-            this.addList(formData, listName);
+            this.addList(formData);
         } else {
-            this.updateList(formData, listName);
+            this.updateList(formData);
         }
         this.store();
         listsView(this);
     }
 
-    addList(formData, listName) {
+    addList(formData) {
+        const listName = formData.get('list-name');
         for (let list of this.lists) {
             if (listName === list.name) {
                 alert('List with that name already exists');
@@ -71,12 +71,15 @@ class ListsCollection {
         listsView(this);
     }
 
-    updateList(formData, listName) {
+    updateList(formData) {
+        const originalListName = formData.get('original-list-name');
+        const newListName = formData.get('list-name');
         const formDuedate = new Date(formData.get('list-duedate'));
         const listDuedate = isValidDate(formDuedate) ? formDuedate : 'None';
         const listDescription = formData.get('list-description');
         for (let list of this.lists) {
-            if (list.name === listName) {
+            if (list.name === originalListName) {
+                list.name = newListName;
                 list.duedate = listDuedate;
                 list.description = listDescription;
                 return
