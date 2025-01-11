@@ -28,19 +28,42 @@ const tasksView = (selectedListName, listsCollection) => {
     listSelectDiv.appendChild(listSelect);
     listSelect.addEventListener('change', (e) => {changeHandlerListSelect(e)});
 
-    const listDiv = document.createElement('div');
+    const buttonDiv = document.createElement('div');
     const taskButton = document.createElement('button');
     if (selectedListName !== 'all') {
         taskButton.classList.add('new-task-button');
         taskButton.textContent = 'Add task';
         taskButton.dataset.listName = selectedListName;
         taskButton.addEventListener('click', (e) => {clickHandlerNewTask(e)});
-        listDiv.appendChild(taskButton);
+        buttonDiv.appendChild(taskButton);
     }
+
     const taskDiv = document.createElement('div');
     taskDiv.classList.add('tasks-div');
-    const taskUl = document.createElement('ul');
-    taskUl.classList.add('task-ul');
+
+    const checkBoxColumn = document.createElement('div');
+    checkBoxColumn.classList.add('col');
+    checkBoxColumn.appendChild(listSelectDiv);
+
+    const checkboxColumnHeader = document.createElement('div');
+    checkboxColumnHeader.textContent = 'Task Complete';
+    checkBoxColumn.appendChild(checkboxColumnHeader);
+
+    const taskColumn = document.createElement('div');
+    taskColumn.classList.add('col');
+    const taskColumnHeader = document.createElement('div');
+    taskColumnHeader.textContent = 'Task';
+    taskColumn.append(buttonDiv, taskColumnHeader);
+
+    const duedateColumn = document.createElement('div');
+    duedateColumn.classList.add('col');
+    const duedateColumnHeader = document.createElement('div');
+    duedateColumnHeader.textContent = 'Duedate';
+    const columnSpacer = document.createElement('div');
+    duedateColumn.append(columnSpacer, duedateColumnHeader);
+
+    taskDiv.append(checkBoxColumn, taskColumn, duedateColumn);
+    
     if (selectedListName === 'all') {
         for (let list of listsCollection.lists) {
             const tasks = []
@@ -53,9 +76,7 @@ const tasksView = (selectedListName, listsCollection) => {
         populateTaskList(selectedListName, selectedList.tasks);
     }
    
-    taskDiv.appendChild(taskUl);
-    listDiv.appendChild(taskDiv);
-    contentDiv.append(listSelectDiv, listDiv, taskDiv);
+    contentDiv.appendChild(taskDiv);
 
     function clickHandlerNewTask(e) {
         e.preventDefault();
@@ -68,13 +89,12 @@ const tasksView = (selectedListName, listsCollection) => {
 
     function changeHandlerListSelect(e) {
         const newSelectedListName = e.target.value;
-        taskUl.textContent = '';
         tasksView(newSelectedListName, listsCollection);
     }
 
     function populateTaskList(listName, tasks) {
         for (let task of tasks) {
-            const taskLi = document.createElement('li');
+            const taskCheckboxDiv = document.createElement('div');
             const taskCheckbox = document.createElement('input');
             taskCheckbox.setAttribute('type', 'checkbox');
             taskCheckbox.id = task.name;
@@ -83,28 +103,36 @@ const tasksView = (selectedListName, listsCollection) => {
             if (task.done) {
                 taskCheckbox.checked = true;
             }
+            taskCheckboxDiv.appendChild(taskCheckbox);
+            checkBoxColumn.appendChild(taskCheckboxDiv);
+
             const checkboxLabel = document.createElement('label');
-            checkboxLabel.textContent = `${task.name} Due: ${task.duedate.toLocaleString()}`;
+            checkboxLabel.textContent = `${task.name}`;
             checkboxLabel.setAttribute('for', task.name);
             checkboxLabel.dataset.taskName = task.name;
             checkboxLabel.dataset.listName = listName;
             checkboxLabel.addEventListener('click', (e) => {e.preventDefault();})
-            taskLi.append(taskCheckbox, checkboxLabel);
+            taskColumn.appendChild(checkboxLabel);
+
+            const dueDateDiv = document.createElement('div');
+            dueDateDiv.textContent = `Due: ${task.duedate.toLocaleString()}`;
+            duedateColumn.appendChild(dueDateDiv);
+
             const taskDeleteButton = document.createElement('button');
             taskDeleteButton.textContent = 'x';
             taskDeleteButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 listsCollection.deleteTask(listName, task);
             });
-            taskLi.appendChild(taskDeleteButton);
-            taskUl.appendChild(taskLi);
             taskCheckbox.addEventListener('click', (e) => {clickHandlerTaskCheckbox(e)});
             
         }
-        taskUl.addEventListener('click', (e) => {
+
+        taskColumn.addEventListener('click', (e) => {
             const selectedTaskName = e.target.dataset.taskName;
             if (!selectedTaskName || e.target.tagName !== 'LABEL') {return};
             openTaskModal(e, listsCollection);
         })
+        
     }
 }

@@ -75,7 +75,7 @@ header, #content {
 }
 
 #logo {
-    color: var(--white-smoke);
+    color: white;
     font-family: 'folks-heavyregular';
     font-weight: bold;
     font-size: 2rem;
@@ -103,10 +103,29 @@ header {
     text-align: center;
 }
 
+select {
+    width: 95%;
+}
+
 #content {
     background-color: white;
     border-radius: 0 0 10px 10px;
     height: 85vh;
+    padding: 20px;
+}
+
+.controls-div {
+    display: flex;
+    justify-content: center;
+}
+
+.controls-div > * {
+    margin: 0 10px 5px 10px;
+}
+
+.tasks-div {
+    display: grid;
+    grid-auto-flow: column;
 }
 
 .modal-background {
@@ -130,4 +149,17 @@ header {
 
 .list-div {
     border: 1px solid gray;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.col > * {
+    height: 30px;
+}
+
+.col > *:nth-child(2n + 3) {
+    background-color: var(--white-smoke);
 }
