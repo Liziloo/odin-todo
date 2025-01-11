@@ -42,6 +42,11 @@ const openTaskModal = (e, listsCollection) => {
         newOrUpdateInput.value = 'new';
     }
 
+    const originalTaskInput = document.createElement('input');
+    originalTaskInput.hidden = true;
+    originalTaskInput.name = 'original-task-name';
+    originalTaskInput.value = chosenTask.name;
+
     const originalListInput = document.createElement('input');
     originalListInput.hidden = true;
     originalListInput.name = 'original-list';
@@ -142,7 +147,7 @@ const openTaskModal = (e, listsCollection) => {
         listsCollection.handleTaskSubmit(formData);
     })
 
-    taskForm.append(taskDoneInput, originalListInput, newOrUpdateInput, nameDiv, listsDiv, descriptionDiv, duedateDiv, priorityDiv, notesDiv, submitButton);
+    taskForm.append(taskDoneInput, originalTaskInput, originalListInput, newOrUpdateInput, nameDiv, listsDiv, descriptionDiv, duedateDiv, priorityDiv, notesDiv, submitButton);
 
     modalDiv.append(modalHeader, taskForm);
     modalBackgroundDiv.appendChild(modalDiv);

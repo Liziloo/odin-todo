@@ -30,8 +30,9 @@ class List {
     }
 
     updateTask(formData) {
-        const taskName = formData.get('task-name');
-        const task = this.tasks.find((task) => task.name === taskName);
+        const originalTaskName = formData.get('original-task-name');
+        const newTaskName = formData.get('task-name');
+        const task = this.tasks.find((task) => task.name === originalTaskName);
         if (!task) {
             alert('No such task');
             return
@@ -39,6 +40,7 @@ class List {
         const submittedDueDate = formData.get('task-duedate');
         const taskDuedate = new Date(submittedDueDate);
         const taskDone = formData.get('task-done') === 'false' ? false : true;
+        task.name = newTaskName;
         task.description = formData.get('task-description');
         task.duedate = isValidDate(taskDuedate) ? taskDuedate : 'None';
         task.priority = formData.get('task-priority');

@@ -89,7 +89,6 @@ nav {
 nav button {
     color: white;
     background-color: var(--blue-munsell);
-    border-color: #041c39;
     font-family: 'assistantextrabold';
     font-size: 1.5rem;
     font-weight: 900;
@@ -105,13 +104,21 @@ header {
 
 select {
     width: 95%;
+    border-radius: 5px;
 }
 
 #content {
     background-color: white;
     border-radius: 0 0 10px 10px;
-    height: 85vh;
+    min-height: 75vh;
     padding: 20px;
+}
+
+#content button {
+    border-radius: 5px;
+    padding: 0 5px;
+    background-color: #d8fafe;
+    border: 0.5px solid var(--blue-munsell);
 }
 
 .controls-div {
@@ -137,6 +144,10 @@ select {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+.tasks-div button {
+    border-radius: 5px;
+}
+
 .modal {
     position: absolute;
     top: 50%;
@@ -158,6 +169,10 @@ select {
 
 .col > * {
     height: 30px;
+}
+
+.col > *:nth-child(2) {
+    font-family: 'assistantbold';
 }
 
 .col > *:nth-child(2n + 3) {
