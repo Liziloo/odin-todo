@@ -1,9 +1,63 @@
+@font-face {
+    font-family: 'assistantbold';
+    src: url('../fonts/assistant-bold-webfont.woff2') format('woff2'),
+         url('../fonts/assistant-bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'assistantextrabold';
+    src: url('../fonts/assistant-extrabold-webfont.woff2') format('woff2'),
+         url('../fonts/assistant-extrabold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'assistantsemibold';
+    src: url('../fonts/assistant-semibold-webfont.woff2') format('woff2'),
+         url('../fonts/assistant-semibold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'assistantextralight';
+    src: url('../fonts/assistant-extralight-webfont.woff2') format('woff2'),
+         url('../fonts/assistant-extralight-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'assistantlight';
+    src: url('../fonts/assistant-light-webfont.woff2') format('woff2'),
+         url('../fonts/assistant-light-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'assistantregular';
+    src: url('../fonts/assistant-regular-webfont.woff2') format('woff2'),
+         url('../fonts/assistant-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'folks-heavyregular';
+    src: url('../fonts/Folks-Heavy-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
-    font-family: arial;
-    --rosewood: #072F5F;
-    --rich-black: #0b2027 ;
-    --beaver: #068D9D;
-    --roseda-green: #747274;
+    font-family: 'assistantregular', arial;
+    --berkeley-blue: #072F5F;
+    --blue-munsell: #068D9D;
+    --dim-gray: #747274;
     --white-smoke: #F2F2F2;
 }
 
@@ -22,6 +76,7 @@ header, #content {
 
 #logo {
     color: var(--white-smoke);
+    font-family: 'folks-heavyregular';
     font-weight: bold;
     font-size: 2rem;
 }
@@ -33,15 +88,16 @@ nav {
 
 nav button {
     color: white;
-    background-color: var(--beaver);
+    background-color: var(--blue-munsell);
     border-color: #041c39;
+    font-family: 'assistantextrabold';
     font-size: 1.5rem;
     font-weight: 900;
-    -webkit-text-stroke: 1px #010913;
+    -webkit-text-stroke: 1px #02353b;
 }
 
 header {
-    background-color: var(--rosewood);
+    background-color: var(--berkeley-blue);
     margin-top: 20px;
     border-radius: 10px 10px 0 0;
     text-align: center;
