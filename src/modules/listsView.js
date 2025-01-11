@@ -3,7 +3,6 @@ export { listsView };
 
 
 const listsView = (listsCollection) => {
-    console.log('listsview listscollect', listsCollection);
     const contentDiv = document.querySelector('#content');
     contentDiv.textContent = '';
 

@@ -1,3 +1,58 @@
+:root {
+    font-family: arial;
+    --rosewood: #072F5F;
+    --rich-black: #0b2027 ;
+    --beaver: #068D9D;
+    --roseda-green: #747274;
+    --white-smoke: #F2F2F2;
+}
+
+button {
+    background-color: #FFFFFF;
+}
+
+body {
+    background-color: black;
+}
+
+header, #content {
+    width: 75%;
+    margin: 0 auto;
+}
+
+#logo {
+    color: var(--white-smoke);
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+nav {
+    display: grid;
+    grid-auto-flow: column;
+}
+
+nav button {
+    color: white;
+    background-color: var(--beaver);
+    border-color: #041c39;
+    font-size: 1.5rem;
+    font-weight: 900;
+    -webkit-text-stroke: 1px #010913;
+}
+
+header {
+    background-color: var(--rosewood);
+    margin-top: 20px;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+}
+
+#content {
+    background-color: white;
+    border-radius: 0 0 10px 10px;
+    height: 85vh;
+}
+
 .modal-background {
     position: absolute;
     top: 0;

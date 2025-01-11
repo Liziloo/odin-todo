@@ -107,5 +107,4 @@ const tasksView = (selectedListName, listsCollection) => {
             openTaskModal(e, listsCollection);
         })
     }
-    console.log('tasks-view listsCollection', listsCollection);
 }

@@ -62,3 +62,10 @@
     margin: 0;
     padding: 0;
   }
+
+  /*
+    Remove styling on buttons
+  */
+  button {
+    border: 1px solid black;
+  }
