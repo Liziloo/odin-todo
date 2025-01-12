@@ -130,12 +130,13 @@ const tasksView = (selectedListName, listsCollection) => {
             taskCheckbox.addEventListener('click', (e) => {clickHandlerTaskCheckbox(e)});
             
         }
-
-        taskColumn.addEventListener('click', (e) => {
-            const selectedTaskName = e.target.dataset.taskName;
-            if (!selectedTaskName || e.target.tagName !== 'LABEL') {return};
-            openTaskModal(e, listsCollection);
-        })
         
     }
+
+    taskColumn.addEventListener('click', (e) => {
+        console.log('triggered');
+        const selectedTaskName = e.target.dataset.taskName;
+        if (!selectedTaskName || e.target.tagName !== 'LABEL') {return};
+        openTaskModal(e, listsCollection);
+    })
 }
