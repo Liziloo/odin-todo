@@ -62,7 +62,14 @@ const tasksView = (selectedListName, listsCollection) => {
     const columnSpacer = document.createElement('div');
     duedateColumn.append(columnSpacer, duedateColumnHeader);
 
-    taskDiv.append(checkBoxColumn, taskColumn, duedateColumn);
+    const deleteColumn = document.createElement('div');
+    deleteColumn.classList.add('col');
+    const deleteColumnHeader = document.createElement('div');
+    deleteColumnHeader.textContent = 'Delete';
+    const secondSpacer = document.createElement('div');
+    deleteColumn.append(secondSpacer, deleteColumnHeader);
+
+    taskDiv.append(checkBoxColumn, taskColumn, duedateColumn, deleteColumn);
     
     if (selectedListName === 'all') {
         for (let list of listsCollection.lists) {
@@ -121,14 +128,17 @@ const tasksView = (selectedListName, listsCollection) => {
             dueDateDiv.textContent = `Due: ${task.duedate.toLocaleString()}`;
             duedateColumn.appendChild(dueDateDiv);
 
+            const deleteButtonDiv = document.createElement('div');
             const taskDeleteButton = document.createElement('button');
             taskDeleteButton.textContent = 'x';
+            taskDeleteButton.classList.add('delete-button');
             taskDeleteButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 listsCollection.deleteTask(listName, task);
             });
             taskCheckbox.addEventListener('click', (e) => {clickHandlerTaskCheckbox(e)});
-            
+            deleteButtonDiv.appendChild(taskDeleteButton);
+            deleteColumn.appendChild(deleteButtonDiv);
         }
         
     }

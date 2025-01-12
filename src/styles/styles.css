@@ -71,7 +71,7 @@ body {
 }
 
 header, #content {
-    width: clamp(550px, 75%, 700px);
+    width: clamp(600px, 75%, 700px);
     margin: 0 auto;
 }
 
@@ -160,6 +160,12 @@ select {
 
 .tasks-div button {
     border-radius: 5px;
+}
+
+.delete-button {
+    height: 2rem;
+    width: 2rem;
+    padding: 2px !important;
 }
 
 .modal {
