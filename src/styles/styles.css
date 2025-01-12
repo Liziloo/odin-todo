@@ -59,6 +59,7 @@
     --blue-munsell: #068D9D;
     --dim-gray: #747274;
     --white-smoke: #F2F2F2;
+    --orange-web: #F3A712;
 }
 
 button {
@@ -70,7 +71,7 @@ body {
 }
 
 header, #content {
-    width: 75%;
+    width: clamp(550px, 75%, 700px);
     margin: 0 auto;
 }
 
@@ -133,6 +134,17 @@ select {
 .tasks-div {
     display: grid;
     grid-auto-flow: column;
+    grid-template-columns: 1fr 2fr 2fr;
+}
+
+.task-name-label {
+    color: var(--white-smoke);
+    background-color: var(--orange-web);
+    padding: 2px 5px;
+    border: 1px solid #9b6a08;
+    border-radius: 5px;
+    width: 90%;
+    box-shadow: gray 1px 1px;
 }
 
 .modal-background {
@@ -225,7 +237,9 @@ select {
 }
 
 .col > * {
-    height: 30px;
+    height: 40px;
+    padding: 5px;
+    width: 100%;
 }
 
 .col > *:nth-child(2) {

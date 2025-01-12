@@ -46,7 +46,7 @@ const tasksView = (selectedListName, listsCollection) => {
     checkBoxColumn.appendChild(listSelectDiv);
 
     const checkboxColumnHeader = document.createElement('div');
-    checkboxColumnHeader.textContent = 'Task Complete';
+    checkboxColumnHeader.textContent = 'Complete';
     checkBoxColumn.appendChild(checkboxColumnHeader);
 
     const taskColumn = document.createElement('div');
@@ -106,13 +106,16 @@ const tasksView = (selectedListName, listsCollection) => {
             taskCheckboxDiv.appendChild(taskCheckbox);
             checkBoxColumn.appendChild(taskCheckboxDiv);
 
+            const taskNameLabelDiv = document.createElement('div');
             const checkboxLabel = document.createElement('label');
             checkboxLabel.textContent = `${task.name}`;
+            checkboxLabel.classList.add('task-name-label');
             checkboxLabel.setAttribute('for', task.name);
             checkboxLabel.dataset.taskName = task.name;
             checkboxLabel.dataset.listName = listName;
             checkboxLabel.addEventListener('click', (e) => {e.preventDefault();})
-            taskColumn.appendChild(checkboxLabel);
+            taskNameLabelDiv.appendChild(checkboxLabel)
+            taskColumn.appendChild(taskNameLabelDiv);
 
             const dueDateDiv = document.createElement('div');
             dueDateDiv.textContent = `Due: ${task.duedate.toLocaleString()}`;
