@@ -74,6 +74,7 @@ const openTaskModal = (e, listsCollection) => {
     nameDiv.append(nameLabel, nameInput);
 
     const listsDiv = document.createElement('div');
+    listsDiv.classList.add('task-list-div');
     const listsSelectLabel = document.createElement('label');
     listsSelectLabel.textContent = 'Add to List:';
     listsSelectLabel.setAttribute('for', 'task-list-name');
