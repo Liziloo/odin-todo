@@ -17,8 +17,12 @@ const listsView = (listsCollection) => {
     for (let list of listsCollection.lists) {
         const listLi = document.createElement('div');
         listLi.classList.add('list-div');
+
         const listName = document.createElement('div');
+        listName.classList.add('list-name');
         listName.textContent = list.name;
+
+        const radioDiv = document.createElement('div');
         const defaultRadio = document.createElement('input');
         defaultRadio.setAttribute('type', 'radio');
         defaultRadio.setAttribute('name', 'default-check');
@@ -28,8 +32,10 @@ const listsView = (listsCollection) => {
         }
         const defaultLabel = document.createElement('label');
         defaultLabel.textContent = 'Make default';
+        radioDiv.append(defaultRadio, defaultLabel);
+
         const listDuedate = document.createElement('div');
-        listDuedate.textContent = `Due: ${list.duedate.toLocaleString()}`;
+        listDuedate.textContent = `Duedate: ${list.duedate.toLocaleString()}`;
         const buttonDiv = document.createElement('div');
         buttonDiv.classList.add('button-div');
         const editButton = document.createElement('button');
@@ -47,7 +53,7 @@ const listsView = (listsCollection) => {
             listsCollection.deleteList(deleteListName);
         })
         buttonDiv.append(editButton, deleteButton);
-        listLi.append(listName, defaultRadio, defaultLabel, listDuedate, buttonDiv);
+        listLi.append(listName, radioDiv, listDuedate, buttonDiv);
         listsDiv.appendChild(listLi);
     }
     contentDiv.append(newListDiv, listsDiv);

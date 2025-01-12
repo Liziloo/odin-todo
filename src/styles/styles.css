@@ -178,3 +178,22 @@ select {
 .col > *:nth-child(2n + 3) {
     background-color: var(--white-smoke);
 }
+
+.new-list-button {
+    margin: 5px 0;
+}
+
+.list-div {
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 5px;
+}
+
+.button-div button {
+    margin-right: 5px;
+}
+
+.list-name {
+    font-family: 'assistantbold';
+}
