@@ -227,8 +227,20 @@ select {
     flex-direction: column;
 }
 
-.list-div {
-    border: 1px solid gray;
+.lists-div div:first-of-type {
+    border-radius: 10px 10px 0 0;
+}
+
+.lists-div div:last-of-type {
+    border-radius: 0 0 10px 10px;
+}
+
+.list-div:nth-child(even) {
+    background-color: var(--orange-web);
+}
+
+.list-div:nth-child(odd) {
+    background-color: var(--white-smoke);
 }
 
 .col {

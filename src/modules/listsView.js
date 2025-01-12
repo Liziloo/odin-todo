@@ -14,6 +14,7 @@ const listsView = (listsCollection) => {
     newListButton.addEventListener('click', clickHandlerNewList);
 
     const listsDiv = document.createElement('div');
+    listsDiv.classList.add('lists-div');
     for (let list of listsCollection.lists) {
         const listLi = document.createElement('div');
         listLi.classList.add('list-div');
