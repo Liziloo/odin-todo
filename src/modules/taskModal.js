@@ -67,7 +67,9 @@ const openTaskModal = (e, listsCollection) => {
     nameDiv.classList.add('task-name');
     const nameLabel = document.createElement('label');
     nameLabel.textContent = 'Task name:';
+    nameLabel.htmlFor = 'task-name';
     const nameInput = document.createElement('input');
+    nameInput.id = 'task-name';
     nameInput.required = true;
     nameInput.setAttribute('name', 'task-name');
     nameInput.value = chosenTask ? chosenTask.name : null;
@@ -77,10 +79,10 @@ const openTaskModal = (e, listsCollection) => {
     listsDiv.classList.add('task-list-div');
     const listsSelectLabel = document.createElement('label');
     listsSelectLabel.textContent = 'Add to List:';
-    listsSelectLabel.setAttribute('for', 'task-list-name');
+    listsSelectLabel.htmlFor = 'task-list-name';
     const listsSelect = document.createElement('select');
     listsSelect.setAttribute('name', 'task-list-name');
-    listsSelect.id = 'task-list';
+    listsSelect.id = 'task-list-name';
     for (let list of listsCollection.lists) {
         const listOption = document.createElement('option');
         listOption.value = list.name;
@@ -97,8 +99,10 @@ const openTaskModal = (e, listsCollection) => {
     descriptionDiv.classList.add('task-description');
     const descriptionLabel = document.createElement('label');
     descriptionLabel.textContent = 'Description:';
+    descriptionLabel.htmlFor = 'task-description';
     const descriptionInput = document.createElement('input');
     descriptionInput.setAttribute('name', 'task-description');
+    descriptionInput.id = 'task-description';
     descriptionInput.value = chosenTask ? chosenTask.description : null;
     descriptionDiv.append(descriptionLabel, descriptionInput);
 
@@ -106,7 +110,9 @@ const openTaskModal = (e, listsCollection) => {
     duedateDiv.classList.add('task-duedate');
     const duedateLabel = document.createElement('label');
     duedateLabel.textContent = 'Due date:';
+    duedateLabel.htmlFor = 'task-duedate';
     const duedateInput = document.createElement('input');
+    duedateInput.id = 'task-duedate';
     duedateInput.setAttribute('name', 'task-duedate');
     duedateInput.setAttribute('type', 'datetime-local');
     duedateInput.value = chosenTask && isValidDate(chosenTask.duedate) ? format(chosenTask.duedate, "yyyy-MM-dd'T'HH:mm") : null;
@@ -115,8 +121,10 @@ const openTaskModal = (e, listsCollection) => {
     const priorityDiv = document.createElement('div');
     priorityDiv.classList.add('task-priority');
     const priorityLabel = document.createElement('label');
+    priorityLabel.htmlFor = 'task-priority';
     priorityLabel.textContent = 'Priority:';
     const prioritySelect = document.createElement('select');
+    prioritySelect.id = 'task-priority';
     prioritySelect.classList.add('task-priority-select');
     prioritySelect.setAttribute('name', 'task-priority');
     prioritySelect.required = true;
@@ -134,8 +142,10 @@ const openTaskModal = (e, listsCollection) => {
     const notesDiv = document.createElement('div');
     notesDiv.classList.add('task-notes');
     const notesLabel = document.createElement('label');
+    notesLabel.htmlFor = 'task-notes';
     notesLabel.textContent = 'Notes:';
     const notesInput = document.createElement('textarea');
+    notesInput.id = 'task-notes';
     notesInput.setAttribute('name', 'task-notes');
     notesInput.value = chosenTask ? chosenTask.notes : null;
     notesDiv.append(notesLabel, notesInput);
