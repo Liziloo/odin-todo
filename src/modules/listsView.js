@@ -15,6 +15,8 @@ const listsView = (listsCollection) => {
 
     const listsDiv = document.createElement('div');
     listsDiv.classList.add('lists-div');
+
+    let counter = 0;
     for (let list of listsCollection.lists) {
         const listLi = document.createElement('div');
         listLi.classList.add('list-div');
@@ -25,6 +27,7 @@ const listsView = (listsCollection) => {
 
         const radioDiv = document.createElement('div');
         const defaultRadio = document.createElement('input');
+        defaultRadio.id = `default-check-${counter}`;
         defaultRadio.setAttribute('type', 'radio');
         defaultRadio.setAttribute('name', 'default-check');
         defaultRadio.dataset.listName = list.name;
@@ -32,6 +35,7 @@ const listsView = (listsCollection) => {
             defaultRadio.checked = true;
         }
         const defaultLabel = document.createElement('label');
+        defaultLabel.htmlFor = `default-check-${counter}`;
         defaultLabel.textContent = 'Make default';
         radioDiv.append(defaultRadio, defaultLabel);
 
@@ -56,6 +60,7 @@ const listsView = (listsCollection) => {
         buttonDiv.append(editButton, deleteButton);
         listLi.append(listName, radioDiv, listDuedate, buttonDiv);
         listsDiv.appendChild(listLi);
+        counter++;
     }
     contentDiv.append(newListDiv, listsDiv);
 

@@ -43,7 +43,9 @@ const openListModal = (list, listsCollection) => {
     nameDiv.classList.add('name-div');
     const nameLabel = document.createElement('label');
     nameLabel.textContent = 'List name:';
+    nameLabel.htmlFor = 'list-name';
     const nameInput = document.createElement('input');
+    nameInput.id = 'list-name';
     nameInput.required = true;
     nameInput.setAttribute('name', 'list-name');
     nameInput.value = list ? list.name : '';
@@ -53,7 +55,9 @@ const openListModal = (list, listsCollection) => {
     duedateDiv.classList.add('duedate-div');
     const duedateLabel = document.createElement('label');
     duedateLabel.textContent = 'Complete list by:';
+    duedateLabel.htmlFor = 'list-duedate';
     const duedateInput = document.createElement('input');
+    duedateInput.id = 'list-duedate';
     duedateInput.setAttribute('type', 'datetime-local');
     duedateInput.setAttribute('name', 'list-duedate');
     duedateInput.value = list && isValidDate(list.duedate) ? format(list.duedate, "yyyy-MM-dd'T'HH:mm") : '';
@@ -62,8 +66,10 @@ const openListModal = (list, listsCollection) => {
     const descriptionDiv = document.createElement('div');
     descriptionDiv.classList.add('list-description');
     const descriptionLabel = document.createElement('label');
+    descriptionLabel.htmlFor = 'list-description';
     descriptionLabel.textContent = 'Description:';
     const descriptionInput = document.createElement('input');
+    descriptionInput.id = 'list-description';
     descriptionInput.setAttribute('name', 'list-description');
     descriptionInput.value = list ? list.description : '';
     descriptionDiv.append(descriptionLabel, descriptionInput);
@@ -87,6 +93,7 @@ const openListModal = (list, listsCollection) => {
         const listForm = document.querySelector('.list-form');
         const formData = new FormData(listForm);
         listsCollection.handleListSubmit(formData);
+        modalBackgroundDiv.remove();
     })
 
     closeButton.addEventListener('click', handleCloseModal);
